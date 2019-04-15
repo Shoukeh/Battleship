@@ -3,10 +3,11 @@ package jurisHomickis;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import java.awt.Toolkit;
 
 public class Battleship {
 
-	private JFrame frame;
+	private JFrame frmBattleship;
 
 	/**
 	 * Launch the application.
@@ -16,7 +17,7 @@ public class Battleship {
 			public void run() {
 				try {
 					Battleship window = new Battleship();
-					window.frame.setVisible(true);
+					window.frmBattleship.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -35,9 +36,11 @@ public class Battleship {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmBattleship = new JFrame();
+		frmBattleship.setIconImage(Toolkit.getDefaultToolkit().getImage("/Users/jurishomickis/Documents/memes/PFP.png"));
+		frmBattleship.setTitle("BATTLESHIP");
+		frmBattleship.setBounds(100, 100, 450, 300);
+		frmBattleship.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }
