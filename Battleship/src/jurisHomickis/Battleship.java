@@ -3,7 +3,7 @@ package jurisHomickis;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import java.awt.Toolkit;
+import javax.swing.JPanel;
 
 public class Battleship {
 
@@ -37,10 +37,16 @@ public class Battleship {
 	 */
 	private void initialize() {
 		frmBattleship = new JFrame();
-		frmBattleship.setIconImage(Toolkit.getDefaultToolkit().getImage("/Users/jurishomickis/Documents/memes/PFP.png"));
 		frmBattleship.setTitle("BATTLESHIP");
-		frmBattleship.setBounds(100, 100, 450, 300);
+		frmBattleship.setBounds(100, 100, 616, 414);
 		frmBattleship.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmBattleship.getContentPane().setLayout(null);
+		
+		JPanel panel_Game = new JPanel(){
+			
+		};
+		panel_Game.setBounds(6, 6, 380, 380);
+		frmBattleship.getContentPane().add(panel_Game);
 	}
 
 }
