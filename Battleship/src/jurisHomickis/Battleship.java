@@ -1,6 +1,6 @@
 package jurisHomickis;
 
-import java.awt.EventQueue;
+import java.awt.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,15 +38,27 @@ public class Battleship {
 	private void initialize() {
 		frmBattleship = new JFrame();
 		frmBattleship.setTitle("BATTLESHIP");
-		frmBattleship.setBounds(100, 100, 616, 414);
+		frmBattleship.setBounds(100, 100, 1000, 414);
 		frmBattleship.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmBattleship.getContentPane().setLayout(null);
 		
 		JPanel panel_Game = new JPanel(){
+			public void paint(Graphics gx) {
+				Grid.WH = 10;										//Sätta WidthHeigth variablen i Grid klassen till 10
+				Grid.DrawGrid(gx); 									//Rita en Grid på första spelarens panel
+			}
 			
 		};
-		panel_Game.setBounds(6, 6, 380, 380);
+		panel_Game.setBounds(6, 6, 381, 381);
 		frmBattleship.getContentPane().add(panel_Game);
+		
+		JPanel panel_Game2 = new JPanel() {
+			public void paint(Graphics gx) { 
+				Grid.WH = 10; 										//Sätta WidthHeigth variablen i Grid klassen till 10
+				Grid.DrawGrid(gx); 									//Rita en Grid på andra spelarens panel
+			}
+		};
+		panel_Game2.setBounds(612, 6, 381, 381);
+		frmBattleship.getContentPane().add(panel_Game2);
 	}
-
 }
