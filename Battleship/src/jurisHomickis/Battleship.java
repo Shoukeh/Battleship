@@ -61,12 +61,8 @@ public class Battleship {
 				Grid.WH = 10;
 				Grid.DrawGrid(gx);
 				
-				//Debug
+				//Rita ship builder meny:
 				ShipBuilder.DrawModels(gx);
-				
-				ShipBuilder.DrawCV(gx);
-				repaint();
-				
 			}
 			
 		};
