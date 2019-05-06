@@ -61,7 +61,7 @@ public class Battleship {
 				Grid.WH = 10;
 				Grid.DrawGrid(gx);
 				
-				//Rita ship builder meny:
+				//Rita "ship builder" meny:
 				ShipBuilder.DrawModels(gx);
 			}
 			
@@ -70,16 +70,21 @@ public class Battleship {
 		frmBattleship.getContentPane().add(panel_Game);
 		panel_Game.setLayout(null);
 		
+		JPanel panel_Buttons = new JPanel();
+		panel_Buttons.setBounds(450, 6, 85, 93);
+		panel_Game.add(panel_Buttons);
+		panel_Buttons.setLayout(null);
+		
 		JButton btnStart = new JButton("Start");
-		btnStart.setBounds(439, 6, 113, 29);
-		panel_Game.add(btnStart);
+		btnStart.setBounds(6, 6, 75, 29);
+		panel_Buttons.add(btnStart);
 		
 		JButton btnClear = new JButton("Clear");
-		btnClear.setBounds(439, 38, 113, 29);
-		panel_Game.add(btnClear);
+		btnClear.setBounds(6, 32, 75, 29);
+		panel_Buttons.add(btnClear);
 		
 		JButton btnExit = new JButton("Exit");
-		btnExit.setBounds(439, 68, 113, 29);
-		panel_Game.add(btnExit);
+		btnExit.setBounds(6, 58, 75, 29);
+		panel_Buttons.add(btnExit);
 	}
 }

@@ -16,7 +16,7 @@ public class ShipBuilder {
 	static int spacer = 65; 						//mellanrum mellan skeppar
 	static int TextX = centerX-40;					//X koordinat för texten
 	
-	public static void DrawDD (Graphics gx) {
+	public static void DrawDD (Graphics gx) {		//Metoder för att rita skeppar
 		gx.fillOval(ShipX, ShipY, L_DD, ShipW);
 	}
 	public static void DrawCL (Graphics gx) {
@@ -33,8 +33,8 @@ public class ShipBuilder {
 		//Metod som ritar skeppar mellan båda grids. 
 		//Ska användas för att "bygga" flottan på grids.
 		ShipX = centerX-(L_CV/2);						//mata in X värdet för skeppet
-		ShipY = centerY-spacer;							//samma för Y värdet 
-		DrawCV(gx);										//kalla metoden för att rita ut en skepp, i detta fall en CV (Carrier)juj
+		ShipY = centerY-spacer;							//mata in Y värdet för skeppet 
+		DrawCV(gx);										//kalla metoden för att rita ut en skepp, i detta fall en CV (Carrier)
 		gx.drawString("Remaining: 1", TextX, ShipY+45);
 		
 		ShipX = centerX-(L_BB/2);
