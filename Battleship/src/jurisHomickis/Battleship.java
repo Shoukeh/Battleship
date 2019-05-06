@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Battleship {
 	
@@ -49,6 +51,7 @@ public class Battleship {
 		frmBattleship.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmBattleship.getContentPane().setLayout(null);
 		
+		
 		JPanel panel_Game = new JPanel(){
 			public void paint(Graphics gx) {
 				//Rita Grid för P1
@@ -63,9 +66,58 @@ public class Battleship {
 				
 				//Rita "ship builder" meny:
 				ShipBuilder.DrawModels(gx);
+				
+				//Rita Cursor
+				Cursor.drawCursor(gx);
+				System.out.println("DEBUG: Main panel code done");
+				
 			}
 			
 		};
+		panel_Game.setFocusable(true);
+		panel_Game.requestFocusInWindow();
+		panel_Game.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_D) {
+					Cursor.cursorX += 38;
+					panel_Game.repaint();
+					System.out.println("DEBUG: RIGHT");
+				}
+			}
+		});
+		panel_Game.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_A) {
+					Cursor.cursorX -= 38;
+					panel_Game.repaint();
+					System.out.println("DEBUG: LEFT");
+				}
+			}
+		});
+		panel_Game.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_W) {
+					Cursor.cursorY -= 38;
+					panel_Game.repaint();
+					System.out.println("DEBUG: UP");
+				}
+			}
+		});
+		panel_Game.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_S) {
+					Cursor.cursorY += 38;
+					panel_Game.repaint();
+					System.out.println("DEBUG: DOWN");
+				}
+			}
+		});
+		
+		
 		panel_Game.setBounds(6, 6, 988, 381);
 		frmBattleship.getContentPane().add(panel_Game);
 		panel_Game.setLayout(null);
