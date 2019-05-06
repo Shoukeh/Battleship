@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 
 public class Battleship {
 	
-	boolean yeet = false;
+	static boolean cursorShipSelect = false;
 
 	private JFrame frmBattleship;
 
@@ -47,7 +47,7 @@ public class Battleship {
 	private void initialize() {
 		frmBattleship = new JFrame();
 		frmBattleship.setTitle("BATTLESHIP");
-		frmBattleship.setBounds(100, 100, 1000, 414);
+		frmBattleship.setBounds(100, 100, 1000, 458);
 		frmBattleship.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmBattleship.getContentPane().setLayout(null);
 		
@@ -84,8 +84,11 @@ public class Battleship {
 				if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					
 					if (Cursor.cursorX + 38 > 360) {
-						Cursor.cursorX += 0; 
+						cursorShipSelect = true;
+						Cursor.cursorX = 485;
+						Cursor.cursorY = 130;
 					} else {
+						cursorShipSelect = false;
 						Cursor.cursorX += 38; 
 					}
 					//Repaint
@@ -104,6 +107,10 @@ public class Battleship {
 					//Prevent the cursor from going off screen
 					if (Cursor.cursorX - 38 < 0) {
 						Cursor.cursorX += 0; 
+					} else if (cursorShipSelect == true) {
+						cursorShipSelect = false;
+						Cursor.cursorX = 356;
+						Cursor.cursorY = 242;
 					} else {
 						Cursor.cursorX -= 38; 
 					}
@@ -123,6 +130,10 @@ public class Battleship {
 					//Prevent the cursor from going off screen
 					if (Cursor.cursorY - 38 < 0) {
 						Cursor.cursorY += 0; 
+					} else if (cursorShipSelect == true && Cursor.cursorY - 70 > 110) {
+						Cursor.cursorY -= 67;
+					} else if (cursorShipSelect == true && Cursor.cursorY - 70 < 110) {
+						Cursor.cursorY -= 0;
 					} else {
 						Cursor.cursorY -= 38; 
 					}
@@ -142,7 +153,11 @@ public class Battleship {
 					//Prevent the cursor from going off screen
 					if (Cursor.cursorY + 38 > 360) {			
 						Cursor.cursorY += 0; 
-					} else {
+					} else if (cursorShipSelect == true && Cursor.cursorY + 70 < 380) {
+						Cursor.cursorY += 67;
+					} else if (cursorShipSelect == true && Cursor.cursorY + 70 > 380) {
+						Cursor.cursorY += 0;
+					} else if (cursorShipSelect == false) {
 						Cursor.cursorY += 38; 
 					}
 					//Repaint
@@ -155,18 +170,18 @@ public class Battleship {
 		});
 		
 		
-		panel_Game.setBounds(6, 6, 988, 381);
+		panel_Game.setBounds(6, 37, 988, 381);
 		frmBattleship.getContentPane().add(panel_Game);
 		panel_Game.setLayout(null);
 		
 		JButton btnRegainFocus = new JButton("Regain Focus");
+		btnRegainFocus.setBounds(443, 6, 117, 29);
+		frmBattleship.getContentPane().add(btnRegainFocus);
 		btnRegainFocus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel_Game.setFocusable(true);
 				panel_Game.requestFocusInWindow();
 			}
 		});
-		btnRegainFocus.setBounds(435, 5, 117, 29);
-		panel_Game.add(btnRegainFocus);
 	}
 }
