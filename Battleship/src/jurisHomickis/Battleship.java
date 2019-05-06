@@ -76,43 +76,80 @@ public class Battleship {
 		};
 		panel_Game.setFocusable(true);
 		panel_Game.requestFocusInWindow();
+
+		//Kod för att flytta cursor åt höger 
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_D) {
-					Cursor.cursorX += 38;
+				if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					
+					if (Cursor.cursorX + 38 > 360) {
+						Cursor.cursorX += 0; 
+					} else {
+						Cursor.cursorX += 38; 
+					}
+					//Repaint
 					panel_Game.repaint();
+					//Debug
 					System.out.println("DEBUG: RIGHT");
+					System.out.println("DEBUG: x: " + Cursor.cursorX + "\nDEBUG: y: " + Cursor.cursorY );
 				}
 			}
 		});
+		//Kod för att flytta cursor åt vänster
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_A) {
-					Cursor.cursorX -= 38;
+				if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+					//Prevent the cursor from going off screen
+					if (Cursor.cursorX - 38 < 0) {
+						Cursor.cursorX += 0; 
+					} else {
+						Cursor.cursorX -= 38; 
+					}
+					//Repaint
 					panel_Game.repaint();
+					//Denug
 					System.out.println("DEBUG: LEFT");
+					System.out.println("DEBUG: x: " + Cursor.cursorX + "\nDEBUG: y: " + Cursor.cursorY );
 				}
 			}
 		});
+		//Kod för att flytta cursor uppåt
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_W) {
-					Cursor.cursorY -= 38;
+				if(e.getKeyCode() == KeyEvent.VK_UP) {
+					//Prevent the cursor from going off screen
+					if (Cursor.cursorY - 38 < 0) {
+						Cursor.cursorY += 0; 
+					} else {
+						Cursor.cursorY -= 38; 
+					}
+					//Repaint
 					panel_Game.repaint();
+					//Debug
 					System.out.println("DEBUG: UP");
+					System.out.println("DEBUG: x: " + Cursor.cursorX + "\nDEBUG: y: " + Cursor.cursorY );
 				}
 			}
 		});
+		//Kod för att flytta cursor neråt
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_S) {
-					Cursor.cursorY += 38;
+				if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+					//Prevent the cursor from going off screen
+					if (Cursor.cursorY + 38 > 360) {			
+						Cursor.cursorY += 0; 
+					} else {
+						Cursor.cursorY += 38; 
+					}
+					//Repaint
 					panel_Game.repaint();
+					//Debug
 					System.out.println("DEBUG: DOWN");
+					System.out.println("X: " + Cursor.cursorX + "\nY: " + Cursor.cursorY );
 				}
 			}
 		});
@@ -122,21 +159,14 @@ public class Battleship {
 		frmBattleship.getContentPane().add(panel_Game);
 		panel_Game.setLayout(null);
 		
-		JPanel panel_Buttons = new JPanel();
-		panel_Buttons.setBounds(450, 6, 85, 93);
-		panel_Game.add(panel_Buttons);
-		panel_Buttons.setLayout(null);
-		
-		JButton btnStart = new JButton("Start");
-		btnStart.setBounds(6, 6, 75, 29);
-		panel_Buttons.add(btnStart);
-		
-		JButton btnClear = new JButton("Clear");
-		btnClear.setBounds(6, 32, 75, 29);
-		panel_Buttons.add(btnClear);
-		
-		JButton btnExit = new JButton("Exit");
-		btnExit.setBounds(6, 58, 75, 29);
-		panel_Buttons.add(btnExit);
+		JButton btnRegainFocus = new JButton("Regain Focus");
+		btnRegainFocus.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panel_Game.setFocusable(true);
+				panel_Game.requestFocusInWindow();
+			}
+		});
+		btnRegainFocus.setBounds(435, 5, 117, 29);
+		panel_Game.add(btnRegainFocus);
 	}
 }
