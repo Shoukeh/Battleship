@@ -17,15 +17,19 @@ public class ShipBuilder {
 	static int TextX = centerX-40;					//X koordinat för texten
 	
 	public static void DrawDD (Graphics gx) {		//Metoder för att rita skeppar
+		gx.setColor(Color.BLACK);
 		gx.fillOval(ShipX, ShipY, L_DD, ShipW);
 	}
 	public static void DrawCL (Graphics gx) {
+		gx.setColor(Color.BLACK);
 		gx.fillOval(ShipX, ShipY, L_CL, ShipW);
 	}
 	public static void DrawBB (Graphics gx) {
+		gx.setColor(Color.BLACK);
 		gx.fillOval(ShipX, ShipY, L_BB, ShipW);
 	}
 	public static void DrawCV (Graphics gx) {
+		gx.setColor(Color.BLACK);
 		gx.fillOval(ShipX, ShipY, L_CV, ShipW);
 	}
 	
@@ -52,5 +56,10 @@ public class ShipBuilder {
 		DrawDD(gx);
 		gx.drawString("Remaining: 1", TextX, ShipY+45);
 		
+	}
+	
+	public static void DrawGhostShip (Graphics gx, int ghostX, int ghostY, int ghostD) { //Metod för att rita "spöken," alltså modellen som ritas för att se vart ma placerar skeppet
+		gx.setColor(Color.BLACK);
+		gx.fillOval(ghostX-19, ghostY-19, ShipW, ghostD);
 	}
 }

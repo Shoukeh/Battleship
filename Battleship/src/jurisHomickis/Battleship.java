@@ -13,7 +13,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Battleship {
-	
+
 	static boolean cursorShipSelect = false;
 
 	private JFrame frmBattleship;
@@ -74,9 +74,12 @@ public class Battleship {
 			}
 			
 		};
-		panel_Game.setFocusable(true);
-		panel_Game.requestFocusInWindow();
+		
+		
+		//panel_Game.setFocusable(true);
+		//panel_Game.requestFocusInWindow();
 
+		/* KOD FÖR CURSORs FÖRFLYTTNING */
 		//Kod för att flytta cursor åt höger 
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
@@ -164,7 +167,39 @@ public class Battleship {
 					panel_Game.repaint();
 					//Debug
 					System.out.println("DEBUG: DOWN");
-					System.out.println("X: " + Cursor.cursorX + "\nY: " + Cursor.cursorY );
+					System.out.println("DEBUG: x: " + Cursor.cursorX + "\nDEBUG: y: " + Cursor.cursorY );
+				}
+			}
+		});
+		
+		
+		/*ENTER KNAPPEN - KEY LISTENER*/
+		panel_Game.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					int shipID = Cursor.whatShip(Cursor.cursorX, Cursor.cursorY);
+					String shipID_S = "";
+					switch (shipID) {
+					case 1:
+						shipID_S = "CV";
+						ShipBuilder.DrawGhostShip(Graphics gx, 100, 100, 10);
+						break;
+					case 2:
+						shipID_S = "BB";
+						break;
+					case 3:
+						shipID_S = "CL";
+						break;
+					case 4:
+						shipID_S = "DD";
+						break;
+					}
+					
+					
+					//Debug
+					System.out.println("DEBUG: ENTER");
+					System.out.println("DEBUG: shipID = " + shipID + ", " + shipID_S);
 				}
 			}
 		});
@@ -178,7 +213,7 @@ public class Battleship {
 		btnRegainFocus.setBounds(443, 6, 117, 29);
 		frmBattleship.getContentPane().add(btnRegainFocus);
 		btnRegainFocus.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {		//Knapp för att fokusera på panelen för att kunna flytta cursor.
 				panel_Game.setFocusable(true);
 				panel_Game.requestFocusInWindow();
 			}
