@@ -15,6 +15,8 @@ import java.awt.event.KeyEvent;
 public class Battleship {
 
 	static boolean cursorShipSelect = false;
+	static boolean DrawGhostCV = false;
+	static boolean gameStart = false;
 
 	private JFrame frmBattleship;
 
@@ -33,7 +35,7 @@ public class Battleship {
 			}
 		});
 	}
-
+	
 	/**
 	 * Create the application.
 	 */
@@ -71,6 +73,14 @@ public class Battleship {
 				Cursor.drawCursor(gx);
 				System.out.println("DEBUG: Main panel code done");
 				
+				//Rita ghosts
+				while (DrawGhostCV == true) {
+					ShipBuilder.DrawGhostShip(gx, 100, 100, 10);
+					
+				setFocusable(true);
+				requestFocusInWindow();
+				}
+				
 			}
 			
 		};
@@ -86,13 +96,10 @@ public class Battleship {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					
-					if (Cursor.cursorX + 38 > 360) {
-						cursorShipSelect = true;
-						Cursor.cursorX = 485;
-						Cursor.cursorY = 130;
+					if (gameStart == false) {
+						Cursor.cursorRightPre();
 					} else {
-						cursorShipSelect = false;
-						Cursor.cursorX += 38; 
+						
 					}
 					//Repaint
 					panel_Game.repaint();
@@ -108,14 +115,10 @@ public class Battleship {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 					//Prevent the cursor from going off screen
-					if (Cursor.cursorX - 38 < 0) {
-						Cursor.cursorX += 0; 
-					} else if (cursorShipSelect == true) {
-						cursorShipSelect = false;
-						Cursor.cursorX = 356;
-						Cursor.cursorY = 242;
+					if (gameStart == false) {
+						Cursor.cursorLeftPre();
 					} else {
-						Cursor.cursorX -= 38; 
+						
 					}
 					//Repaint
 					panel_Game.repaint();
@@ -131,14 +134,10 @@ public class Battleship {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_UP) {
 					//Prevent the cursor from going off screen
-					if (Cursor.cursorY - 38 < 0) {
-						Cursor.cursorY += 0; 
-					} else if (cursorShipSelect == true && Cursor.cursorY - 70 > 110) {
-						Cursor.cursorY -= 67;
-					} else if (cursorShipSelect == true && Cursor.cursorY - 70 < 110) {
-						Cursor.cursorY -= 0;
+					if (gameStart == false) {
+						Cursor.cursorUpPre();
 					} else {
-						Cursor.cursorY -= 38; 
+						
 					}
 					//Repaint
 					panel_Game.repaint();
@@ -154,14 +153,10 @@ public class Battleship {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_DOWN) {
 					//Prevent the cursor from going off screen
-					if (Cursor.cursorY + 38 > 360) {			
-						Cursor.cursorY += 0; 
-					} else if (cursorShipSelect == true && Cursor.cursorY + 70 < 380) {
-						Cursor.cursorY += 67;
-					} else if (cursorShipSelect == true && Cursor.cursorY + 70 > 380) {
-						Cursor.cursorY += 0;
-					} else if (cursorShipSelect == false) {
-						Cursor.cursorY += 38; 
+					if (gameStart == false) {
+						Cursor.cursorDownPre();
+					} else {
+						
 					}
 					//Repaint
 					panel_Game.repaint();
@@ -183,7 +178,7 @@ public class Battleship {
 					switch (shipID) {
 					case 1:
 						shipID_S = "CV";
-						ShipBuilder.DrawGhostShip(Graphics gx, 100, 100, 10);
+						
 						break;
 					case 2:
 						shipID_S = "BB";
@@ -214,7 +209,6 @@ public class Battleship {
 		frmBattleship.getContentPane().add(btnRegainFocus);
 		btnRegainFocus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		//Knapp för att fokusera på panelen för att kunna flytta cursor.
-				panel_Game.setFocusable(true);
 				panel_Game.requestFocusInWindow();
 			}
 		});

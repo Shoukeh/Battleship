@@ -29,6 +29,7 @@ public class Cursor {
 			shipID = 0;							//I fall kursor inte står någonstans på ShipBuilder
 		}
 		return shipID;
+	}
 		
 		/*shipID index:
 		0 = null, ERROR
@@ -37,5 +38,56 @@ public class Cursor {
 		3 = CL
 		4 = DD
 		*/
-	}
+		
+		//Methods for movement
+		//RIGHT
+		public static void cursorRightPre() {
+			if (Cursor.cursorX + 38 > 360) {
+				Battleship.cursorShipSelect = true;
+				Cursor.cursorX = 485;
+				Cursor.cursorY = 130;
+			} else {
+				Battleship.cursorShipSelect = false;
+				Cursor.cursorX += 38; 
+			}
+		}
+		
+		//LEFT
+		public static void cursorLeftPre() {
+			if (Cursor.cursorX - 38 < 0) {
+				Cursor.cursorX += 0; 
+			} else if (Battleship.cursorShipSelect == true) {
+				Battleship.cursorShipSelect = false;
+				Cursor.cursorX = 356;
+				Cursor.cursorY = 242;
+			} else {
+				Cursor.cursorX -= 38; 
+			}
+		}
+		
+		//UP
+		public static void cursorUpPre() {
+			if (Cursor.cursorY - 38 < 0) {
+				Cursor.cursorY += 0; 
+			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY - 70 > 110) {
+				Cursor.cursorY -= 67;
+			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY - 70 < 110) {
+				Cursor.cursorY -= 0;
+			} else {
+				Cursor.cursorY -= 38; 
+			}
+		}
+		
+		//DOWN
+		public static void cursorDownPre() {
+			if (Cursor.cursorY + 38 > 360) {			
+				Cursor.cursorY += 0; 
+			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY + 70 < 380) {
+				Cursor.cursorY += 67;
+			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY + 70 > 380) {
+				Cursor.cursorY += 0;
+			} else if (Battleship.cursorShipSelect == false) {
+				Cursor.cursorY += 38; 
+			}
+		}
 }
