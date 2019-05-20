@@ -60,6 +60,6 @@ public class ShipBuilder {
 	
 	public static void DrawGhostShip (Graphics gx, int ghostX, int ghostY, int ghostD) { //Metod för att rita "spöken," alltså modellen som ritas för att se vart ma placerar skeppet
 		gx.setColor(Color.BLACK);
-		gx.fillOval(ghostX-19, ghostY-19, ShipW, ghostD);
+		gx.fillOval(ghostX-11, ghostY-11, ghostD, ShipW);
 	}
 }

@@ -15,8 +15,20 @@ import java.awt.event.KeyEvent;
 public class Battleship {
 
 	static boolean cursorShipSelect = false;
-	static boolean DrawGhostCV = false;
 	static boolean gameStart = false;
+	
+	static boolean ghostCV = false;
+	static boolean ghostBB = false;
+	static boolean ghostCL = false;
+	static boolean ghostDD = false;
+	
+	static boolean draw_CV = false;
+	static boolean draw_BB = false;
+	static boolean draw_CL = false;
+	static boolean draw_DD = false;
+	
+	
+	static boolean mouseOccupied = false;
 
 	private JFrame frmBattleship;
 
@@ -71,15 +83,29 @@ public class Battleship {
 				
 				//Rita Cursor
 				Cursor.drawCursor(gx);
-				System.out.println("DEBUG: Main panel code done");
 				
 				//Rita ghosts
-				while (DrawGhostCV == true) {
-					ShipBuilder.DrawGhostShip(gx, 100, 100, 10);
-					
+				if (ghostCV == true) {
+					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, 144);
+				}
+				
+				if (ghostBB == true) {
+					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, 106);
+				}
+				
+				if (ghostCL == true) {
+					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, 68);
+				}
+				
+				if (ghostDD == true) {
+					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, 30);
+				}
+				
 				setFocusable(true);
 				requestFocusInWindow();
-				}
+				
+				//DEBUG
+				System.out.println("DEBUG: Main panel code done");
 				
 			}
 			
@@ -174,27 +200,46 @@ public class Battleship {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					int shipID = Cursor.whatShip(Cursor.cursorX, Cursor.cursorY);
-					String shipID_S = "";
-					switch (shipID) {
-					case 1:
-						shipID_S = "CV";
+					if (mouseOccupied == false) {	
+						switch (shipID) {
+						case 1:
+							ghostCV = true;
+							break;
+						case 2:
+							ghostBB = true;
+							break;
+						case 3:
+							ghostCL = true;
+							break;
+						case 4:
+							ghostDD = true;
+							break;
+						}
+						mouseOccupied = true;
 						
-						break;
-					case 2:
-						shipID_S = "BB";
-						break;
-					case 3:
-						shipID_S = "CL";
-						break;
-					case 4:
-						shipID_S = "DD";
-						break;
+					} else if (mouseOccupied == true){
+						switch (shipID) {
+						case 1:
+							ghostCV = false;
+							draw_CV = true;
+							break;
+						case 2:
+							ghostBB = false;
+							draw_BB = true;
+							break;
+						case 3:
+							ghostCL = false;
+							draw_CL = true;
+							break;
+						case 4:
+							ghostDD = false;
+							draw_DD = true;
+							break;
+						}
 					}
-					
-					
 					//Debug
 					System.out.println("DEBUG: ENTER");
-					System.out.println("DEBUG: shipID = " + shipID + ", " + shipID_S);
+					System.out.println("DEBUG: shipID = " + shipID);
 				}
 			}
 		});
