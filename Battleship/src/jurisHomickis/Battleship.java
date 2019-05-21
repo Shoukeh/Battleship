@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -27,10 +28,13 @@ public class Battleship {
 	static boolean draw_CL = false;
 	static boolean draw_DD = false;
 	
+	int GhostW, GhostH, GhostTemp;
 	
 	static boolean mouseOccupied = false;
 
 	private JFrame frmBattleship;
+	
+	ArrayList<Ship> ships = new ArrayList<Ship>();
 
 	/**
 	 * Launch the application.
@@ -86,19 +90,23 @@ public class Battleship {
 				
 				//Rita ghosts
 				if (ghostCV == true) {
-					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, 144);
+					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 				}
 				
 				if (ghostBB == true) {
-					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, 106);
+					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 				}
 				
 				if (ghostCL == true) {
-					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, 68);
+					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 				}
 				
 				if (ghostDD == true) {
-					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, 30);
+					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+				}
+				
+				for (int i = 0; i < ships.size(); i++) {
+					ships.get(i).paintShip(gx);		//paint actual ships
 				}
 				
 				setFocusable(true);
@@ -204,45 +212,90 @@ public class Battleship {
 						switch (shipID) {
 						case 1:
 							ghostCV = true;
+							mouseOccupied = true;
+							GhostW = ShipBuilder.L_CV;
+							GhostH = ShipBuilder.ShipW;
 							break;
 						case 2:
 							ghostBB = true;
+							mouseOccupied = true;
+							GhostW = ShipBuilder.L_BB;
+							GhostH = ShipBuilder.ShipW;
 							break;
 						case 3:
 							ghostCL = true;
+							mouseOccupied = true;
+							GhostW = ShipBuilder.L_CL;
+							GhostH = ShipBuilder.ShipW;
 							break;
 						case 4:
 							ghostDD = true;
+							mouseOccupied = true;
+							GhostW = ShipBuilder.L_DD;
+							GhostH = ShipBuilder.ShipW;
 							break;
 						}
-						mouseOccupied = true;
+						
 						
 					} else if (mouseOccupied == true){
-						switch (shipID) {
-						case 1:
+						if (ghostCV == true) {
 							ghostCV = false;
 							draw_CV = true;
-							break;
-						case 2:
+							mouseOccupied = false;
+							Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+							ships.add(CV);
+							System.out.println("owo");
+						} else if (ghostBB == true) {
 							ghostBB = false;
 							draw_BB = true;
-							break;
-						case 3:
+							mouseOccupied = false;
+							Ship BB = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+							ships.add(BB);
+						} else if (ghostCL == true) {
 							ghostCL = false;
 							draw_CL = true;
-							break;
-						case 4:
+							mouseOccupied = false;
+							Ship CL = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+							ships.add(CL);
+						} else if (ghostDD == true) {
 							ghostDD = false;
 							draw_DD = true;
-							break;
+							mouseOccupied = false;
+							Ship DD = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+							ships.add(DD);
 						}
 					}
+					panel_Game.repaint();
 					//Debug
 					System.out.println("DEBUG: ENTER");
 					System.out.println("DEBUG: shipID = " + shipID);
 				}
 			}
 		});
+		
+		//KeyListener för knappen R - roterar ghosts
+		panel_Game.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_R) {
+					//Flip H and W to rotate the ghost ship
+					System.out.println(GhostW + " " + GhostH);
+					
+					GhostTemp = GhostW;
+					GhostW = GhostH;
+					GhostH = GhostTemp;
+					
+					System.out.println(GhostW + " " + GhostH);
+					
+					//Repaint
+					panel_Game.repaint();
+					//Debug
+					System.out.println("DEBUG: Rotate");
+				}
+			}
+		});
+		
+		
 		
 		
 		panel_Game.setBounds(6, 37, 988, 381);
