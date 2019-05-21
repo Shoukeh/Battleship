@@ -39,22 +39,22 @@ public class ShipBuilder {
 		ShipX = centerX-(L_CV/2);						//mata in X värdet för skeppet
 		ShipY = centerY-spacer;							//mata in Y värdet för skeppet 
 		DrawCV(gx);										//kalla metoden för att rita ut en skepp, i detta fall en CV (Carrier)
-		gx.drawString("Remaining: 1", TextX, ShipY+45);
+		gx.drawString("Remaining: " + Battleship.CountCV, TextX, ShipY+45);
 		
 		ShipX = centerX-(L_BB/2);
 		ShipY += spacer;
 		DrawBB(gx);
-		gx.drawString("Remaining: 1", TextX, ShipY+45);
+		gx.drawString("Remaining: " + Battleship.CountBB, TextX, ShipY+45);
 
 		ShipX = centerX-(L_CL/2);
 		ShipY += spacer;
 		DrawCL(gx);
-		gx.drawString("Remaining: 1", TextX, ShipY+45);
+		gx.drawString("Remaining: " + Battleship.CountCL, TextX, ShipY+45);
 		
 		ShipX = centerX-(L_DD/2);
 		ShipY += spacer;
 		DrawDD(gx);
-		gx.drawString("Remaining: 1", TextX, ShipY+45);
+		gx.drawString("Remaining: " + Battleship.CountDD, TextX, ShipY+45);
 		
 	}
 	

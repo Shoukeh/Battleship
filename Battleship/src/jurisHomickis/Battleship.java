@@ -28,10 +28,10 @@ public class Battleship {
 	static int GhostH;
 	int GhostTemp;
 	
-	int CountCV = 1;
-	int CountBB = 2;
-	int CountCL = 3;
-	int CountDD = 4;
+	static int CountCV = 1;
+	static int CountBB = 2;
+	static int CountCL = 3;
+	static int CountDD = 4;
 	
 	static boolean mouseOccupied = false;
 
@@ -88,9 +88,6 @@ public class Battleship {
 				//Rita "ship builder" meny:
 				ShipBuilder.DrawModels(gx);
 				
-				//Rita Cursor
-				Cursor.drawCursor(gx);
-				
 				//Rita ghosts
 				if (ghostCV == true) {
 					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
@@ -111,6 +108,9 @@ public class Battleship {
 				for (int i = 0; i < ships.size(); i++) {
 					ships.get(i).paintShip(gx);		//paint actual ships
 				}
+				
+				//Rita Cursor
+				Cursor.drawCursor(gx);
 				
 				setFocusable(true);
 				requestFocusInWindow();
