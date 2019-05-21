@@ -17,24 +17,27 @@ public class Battleship {
 
 	static boolean cursorShipSelect = false;
 	static boolean gameStart = false;
+	static boolean ghostActive = false;
 	
 	static boolean ghostCV = false;
 	static boolean ghostBB = false;
 	static boolean ghostCL = false;
 	static boolean ghostDD = false;
 	
-	static boolean draw_CV = false;
-	static boolean draw_BB = false;
-	static boolean draw_CL = false;
-	static boolean draw_DD = false;
+	static int GhostW;
+	static int GhostH;
+	int GhostTemp;
 	
-	int GhostW, GhostH, GhostTemp;
+	int CountCV = 1;
+	int CountBB = 2;
+	int CountCL = 3;
+	int CountDD = 4;
 	
 	static boolean mouseOccupied = false;
 
 	private JFrame frmBattleship;
 	
-	ArrayList<Ship> ships = new ArrayList<Ship>();
+	static ArrayList<Ship> ships = new ArrayList<Ship>();
 
 	/**
 	 * Launch the application.
@@ -211,58 +214,78 @@ public class Battleship {
 					if (mouseOccupied == false) {	
 						switch (shipID) {
 						case 1:
-							ghostCV = true;
-							mouseOccupied = true;
-							GhostW = ShipBuilder.L_CV;
-							GhostH = ShipBuilder.ShipW;
+							if (CountCV != 0) {
+								ghostCV = true;
+								ghostActive = true;
+								mouseOccupied = true;
+								GhostW = ShipBuilder.L_CV;
+								GhostH = ShipBuilder.ShipW;
+							}
 							break;
 						case 2:
-							ghostBB = true;
-							mouseOccupied = true;
-							GhostW = ShipBuilder.L_BB;
-							GhostH = ShipBuilder.ShipW;
+							if (CountBB != 0) {
+								ghostBB = true;
+								ghostActive = true;
+								mouseOccupied = true;
+								GhostW = ShipBuilder.L_BB;
+								GhostH = ShipBuilder.ShipW;
+							}
 							break;
 						case 3:
-							ghostCL = true;
-							mouseOccupied = true;
-							GhostW = ShipBuilder.L_CL;
-							GhostH = ShipBuilder.ShipW;
+							if (CountCL != 0) {
+								ghostCL = true;
+								ghostActive = true;
+								mouseOccupied = true;
+								GhostW = ShipBuilder.L_CL;
+								GhostH = ShipBuilder.ShipW;
+							}
 							break;
 						case 4:
-							ghostDD = true;
-							mouseOccupied = true;
-							GhostW = ShipBuilder.L_DD;
-							GhostH = ShipBuilder.ShipW;
+							if (CountDD != 0) {
+								ghostDD = true;
+								ghostActive = true;
+								mouseOccupied = true;
+								GhostW = ShipBuilder.L_DD;
+								GhostH = ShipBuilder.ShipW;
+							}
 							break;
 						}
 						
 						
 					} else if (mouseOccupied == true){
-						if (ghostCV == true) {
-							ghostCV = false;
-							draw_CV = true;
-							mouseOccupied = false;
-							Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
-							ships.add(CV);
-							System.out.println("owo");
-						} else if (ghostBB == true) {
-							ghostBB = false;
-							draw_BB = true;
-							mouseOccupied = false;
-							Ship BB = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
-							ships.add(BB);
-						} else if (ghostCL == true) {
-							ghostCL = false;
-							draw_CL = true;
-							mouseOccupied = false;
-							Ship CL = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
-							ships.add(CL);
-						} else if (ghostDD == true) {
-							ghostDD = false;
-							draw_DD = true;
-							mouseOccupied = false;
-							Ship DD = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
-							ships.add(DD);
+						if (Ship.checkOverlap() == false) {
+							System.out.println("hmm");
+							if (ghostCV == true) {	
+								ghostCV = false;
+								ghostActive = false;
+								mouseOccupied = false;
+								Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+								ships.add(CV);
+								CountCV -= 1;	
+							} else if (ghostBB == true) {
+								ghostBB = false;
+								ghostActive = false;
+								mouseOccupied = false;
+								Ship BB = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+								ships.add(BB);
+								CountBB -= 1;
+							} else if (ghostCL == true) {
+								ghostCL = false;
+								ghostActive = false;
+								mouseOccupied = false;
+								Ship CL = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+								ships.add(CL);
+								CountCL -= 1;
+							} else if (ghostDD == true) {
+								ghostDD = false;
+								ghostActive = false;
+								mouseOccupied = false;
+								Ship DD = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+								ships.add(DD);
+								CountDD -= 1;
+							}
+						} else {
+							System.out.println("fail");
 						}
 					}
 					panel_Game.repaint();
