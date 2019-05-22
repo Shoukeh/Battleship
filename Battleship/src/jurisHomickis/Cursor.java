@@ -41,7 +41,7 @@ public class Cursor {
 		
 		//Methods for movement
 		//RIGHT
-		public static void cursorRightPre() {
+		public static void cursorRightPreP1() {
 			if (Cursor.cursorX + 38 > 360) {
 				Battleship.cursorShipSelect = true;
 				Cursor.cursorX = 485;
@@ -53,7 +53,7 @@ public class Cursor {
 		}
 		
 		//LEFT
-		public static void cursorLeftPre() {
+		public static void cursorLeftPreP1() {
 			if (Cursor.cursorX - 38 < 0) {
 				Cursor.cursorX += 0; 
 			} else if (Battleship.cursorShipSelect == true) {

@@ -27,6 +27,8 @@ public class Battleship {
 	static int GhostW;
 	static int GhostH;
 	int GhostTemp;
+	int PlayerID = 1;
+	String LastShip;
 	
 	static int CountCV = 1;
 	static int CountBB = 2;
@@ -111,7 +113,8 @@ public class Battleship {
 				
 				//Rita Cursor
 				Cursor.drawCursor(gx);
-				
+
+				//Set focus to the game panel
 				setFocusable(true);
 				requestFocusInWindow();
 				
@@ -134,7 +137,7 @@ public class Battleship {
 				if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					
 					if (gameStart == false) {
-						Cursor.cursorRightPre();
+						Cursor.cursorRightPreP1();
 					} else {
 						
 					}
@@ -153,7 +156,7 @@ public class Battleship {
 				if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 					//Prevent the cursor from going off screen
 					if (gameStart == false) {
-						Cursor.cursorLeftPre();
+						Cursor.cursorLeftPreP1();
 					} else {
 						
 					}
@@ -204,6 +207,41 @@ public class Battleship {
 			}
 		});
 		
+		JButton btnUndo = new JButton("Undo");
+		btnUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch(LastShip) {
+				case "CV":
+					CountCV += 1;
+					if (CountCV > 1) CountCV = 1;
+					ships.remove(ships.size()-1);
+					btnUndo.setEnabled(false);
+					break;
+				case "BB":
+					CountBB += 1;
+					if (CountBB > 2) CountBB = 2;
+					ships.remove(ships.size()-1);
+					btnUndo.setEnabled(false);
+					break;
+				case "CL":
+					CountCL += 1;
+					if (CountCL > 3) CountCL = 3;
+					ships.remove(ships.size()-1);
+					btnUndo.setEnabled(false);
+					break;
+				case "DD":
+					CountDD += 1;
+					if (CountDD > 4) CountDD = 4;
+					ships.remove(ships.size()-1);
+					btnUndo.setEnabled(false);
+					break;
+				} 
+				//Ships.remove(Ships.size() - 1);
+				panel_Game.repaint();
+			}
+		});
+		btnUndo.setBounds(440, 6, 117, 29);
+		frmBattleship.getContentPane().add(btnUndo);
 		
 		/*ENTER KNAPPEN - KEY LISTENER*/
 		panel_Game.addKeyListener(new KeyAdapter() {
@@ -254,14 +292,15 @@ public class Battleship {
 						
 					} else if (mouseOccupied == true){
 						if (Ship.checkOverlap() == false) {
-							System.out.println("hmm");
 							if (ghostCV == true) {	
 								ghostCV = false;
 								ghostActive = false;
 								mouseOccupied = false;
 								Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 								ships.add(CV);
-								CountCV -= 1;	
+								CountCV -= 1;
+								LastShip = "CV";
+								btnUndo.setEnabled(true);
 							} else if (ghostBB == true) {
 								ghostBB = false;
 								ghostActive = false;
@@ -269,6 +308,8 @@ public class Battleship {
 								Ship BB = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 								ships.add(BB);
 								CountBB -= 1;
+								LastShip = "BB";
+								btnUndo.setEnabled(true);
 							} else if (ghostCL == true) {
 								ghostCL = false;
 								ghostActive = false;
@@ -276,6 +317,8 @@ public class Battleship {
 								Ship CL = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 								ships.add(CL);
 								CountCL -= 1;
+								LastShip = "CL";
+								btnUndo.setEnabled(true);
 							} else if (ghostDD == true) {
 								ghostDD = false;
 								ghostActive = false;
@@ -283,9 +326,11 @@ public class Battleship {
 								Ship DD = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 								ships.add(DD);
 								CountDD -= 1;
+								LastShip = "DD";
+								btnUndo.setEnabled(true);
 							}
 						} else {
-							System.out.println("fail");
+							System.out.println("DEBUG: Placement fail");
 						}
 					}
 					panel_Game.repaint();
@@ -313,7 +358,7 @@ public class Battleship {
 					//Repaint
 					panel_Game.repaint();
 					//Debug
-					System.out.println("DEBUG: Rotate");
+					System.out.println("DEBUG: Player rotated the ghost");
 				}
 			}
 		});
@@ -326,8 +371,31 @@ public class Battleship {
 		panel_Game.setLayout(null);
 		
 		JButton btnRegainFocus = new JButton("Regain Focus");
-		btnRegainFocus.setBounds(443, 6, 117, 29);
+		btnRegainFocus.setBounds(550, 6, 117, 29);
 		frmBattleship.getContentPane().add(btnRegainFocus);
+		
+		JButton btnAdvanceState = new JButton("Next Player");
+		btnAdvanceState.setBounds(331, 6, 117, 29);
+		frmBattleship.getContentPane().add(btnAdvanceState);
+		
+		JButton btnClearBoardP1 = new JButton("Clear Board: P1");
+		btnClearBoardP1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ships.clear();
+				CountCV = 1;
+				CountBB = 2;
+				CountCL = 3;
+				CountDD = 4;
+				panel_Game.repaint();
+			}
+		});
+		btnClearBoardP1.setBounds(6, 6, 136, 29);
+		frmBattleship.getContentPane().add(btnClearBoardP1);
+		
+		JButton btnClearBoardP2 = new JButton("Clear Board: P2");
+		btnClearBoardP2.setBounds(843, 6, 151, 29);
+		frmBattleship.getContentPane().add(btnClearBoardP2);
+		
 		btnRegainFocus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		//Knapp för att fokusera på panelen för att kunna flytta cursor.
 				panel_Game.requestFocusInWindow();
