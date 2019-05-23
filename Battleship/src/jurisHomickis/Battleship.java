@@ -19,7 +19,7 @@ public class Battleship {
 	//General Game vars
 	static boolean cursorShipSelect = false;
 	static boolean gameStart = false;
-	int PlayerID = 1;
+	static int PlayerID = 0;
 	
 	//Ghost placement releated booleans
 	static boolean ghostCV = false;
@@ -40,6 +40,11 @@ public class Battleship {
 	static int CountCL = 3;
 	static int CountDD = 4;
 	
+	static int CountCV_P2 = 1;
+	static int CountBB_P2 = 2;
+	static int CountCL_P2 = 3;
+	static int CountDD_P2 = 4;
+	
 	//Mouse state boolean
 	static boolean mouseOccupied = false;
 
@@ -47,6 +52,8 @@ public class Battleship {
 	
 	//Array med alla skeppar, oavsett typen
 	static ArrayList<Ship> ships = new ArrayList<Ship>();
+	
+	static ArrayList<Block> blocks = new ArrayList<Block>();
 
 	/**
 	 * Launch the application.
@@ -101,21 +108,23 @@ public class Battleship {
 				if (ghostCV == true) {
 					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 				}
-				
 				if (ghostBB == true) {
 					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 				}
-				
 				if (ghostCL == true) {
 					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 				}
-				
 				if (ghostDD == true) {
 					ShipBuilder.DrawGhostShip(gx, Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 				}
 				
+				//Rita skeppar
 				for (int i = 0; i < ships.size(); i++) {
 					ships.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships
+				}
+				
+				for (int i = 0; i < blocks.size(); i++) {
+					blocks.get(i).SwitchTurn(gx);		//rita ut alla skeppar som finns med i ArrayList ships
 				}
 				
 				//Rita Cursor
@@ -384,6 +393,45 @@ public class Battleship {
 		frmBattleship.getContentPane().add(btnRegainFocus);
 		
 		JButton btnAdvanceState = new JButton("Next Player");
+		btnAdvanceState.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				/* PlayerID Index:
+				 * 1:P1
+				 * 2:Switch Period
+				 * 3:P2
+				 * 4:SwitchPeriod
+				 */
+				PlayerID += 1;
+				System.out.println(PlayerID);
+				switch (PlayerID) {
+					case 1:
+						blocks.clear();
+						Block B1 = new Block(606, 0, 380, 380);
+						blocks.add(B1);
+						panel_Game.repaint();
+						break;
+					case 2:
+						Block B2 = new Block(0, 0, 380, 380);
+						blocks.add(B2);
+						panel_Game.repaint();
+						break;
+					case 3: 
+						blocks.clear();
+						Block B3 = new Block(0, 0, 380, 380);
+						blocks.add(B3);
+						panel_Game.repaint();
+						break;
+					case 4:
+						Block B4 = new Block(606, 0, 380, 380);
+						blocks.add(B4);
+						PlayerID = 0;
+						panel_Game.repaint();
+						break;	
+				}
+				//panel_Game.repaint();
+				
+			}
+		});
 		btnAdvanceState.setBounds(331, 6, 117, 29);
 		frmBattleship.getContentPane().add(btnAdvanceState);
 		

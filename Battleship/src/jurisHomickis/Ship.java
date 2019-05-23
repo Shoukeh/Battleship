@@ -9,7 +9,7 @@ public class Ship {
 	
 	
 	public Ship (int x, int y, int w, int h) {
-		this.hp = w/3;
+		this.hp = w/30;
 		this.w = w;
 		this.h = h;
 		this.x = x;
