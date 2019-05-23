@@ -15,30 +15,37 @@ import java.awt.event.KeyEvent;
 
 public class Battleship {
 
+	//Variable set up
+	//General Game vars
 	static boolean cursorShipSelect = false;
 	static boolean gameStart = false;
-	static boolean ghostActive = false;
+	int PlayerID = 1;
 	
+	//Ghost placement releated booleans
 	static boolean ghostCV = false;
 	static boolean ghostBB = false;
 	static boolean ghostCL = false;
 	static boolean ghostDD = false;
 	
+	//Placement/placement check variables
 	static int GhostW;
 	static int GhostH;
+	static boolean ghostActive;
 	int GhostTemp;
-	int PlayerID = 1;
 	String LastShip;
 	
+	//Ship count
 	static int CountCV = 1;
 	static int CountBB = 2;
 	static int CountCL = 3;
 	static int CountDD = 4;
 	
+	//Mouse state boolean
 	static boolean mouseOccupied = false;
 
 	private JFrame frmBattleship;
 	
+	//Array med alla skeppar, oavsett typen
 	static ArrayList<Ship> ships = new ArrayList<Ship>();
 
 	/**
@@ -108,7 +115,7 @@ public class Battleship {
 				}
 				
 				for (int i = 0; i < ships.size(); i++) {
-					ships.get(i).paintShip(gx);		//paint actual ships
+					ships.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships
 				}
 				
 				//Rita Cursor
@@ -119,7 +126,7 @@ public class Battleship {
 				requestFocusInWindow();
 				
 				//DEBUG
-				System.out.println("DEBUG: Main panel code done");
+				System.out.println("DEBUG: panel code exec");
 				
 			}
 			
@@ -130,12 +137,12 @@ public class Battleship {
 		//panel_Game.requestFocusInWindow();
 
 		/* KOD FÖR CURSORs FÖRFLYTTNING */
-		//Kod för att flytta cursor åt höger 
+		//Kod för att hantera cursor x+ riktning 
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					
+					//call x+ handler method
 					if (gameStart == false) {
 						Cursor.cursorRightPreP1();
 					} else {
@@ -149,12 +156,12 @@ public class Battleship {
 				}
 			}
 		});
-		//Kod för att flytta cursor åt vänster
+		//Kod för att hantera cursor x- riktning 
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-					//Prevent the cursor from going off screen
+					//call x- handler method
 					if (gameStart == false) {
 						Cursor.cursorLeftPreP1();
 					} else {
@@ -168,12 +175,12 @@ public class Battleship {
 				}
 			}
 		});
-		//Kod för att flytta cursor uppåt
+		//Kod för att hantera cursor y- riktning 
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_UP) {
-					//Prevent the cursor from going off screen
+					//call y- handler method
 					if (gameStart == false) {
 						Cursor.cursorUpPre();
 					} else {
@@ -187,12 +194,12 @@ public class Battleship {
 				}
 			}
 		});
-		//Kod för att flytta cursor neråt
+		//Kod för att hantera cursor y+ riktning 
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-					//Prevent the cursor from going off screen
+					//call y+ handler method
 					if (gameStart == false) {
 						Cursor.cursorDownPre();
 					} else {
@@ -207,15 +214,17 @@ public class Battleship {
 			}
 		});
 		
+		//Undo knapp
+		//skapas mitt i allt för att den blir kallad efter i en metod längre neråt
 		JButton btnUndo = new JButton("Undo");
 		btnUndo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switch(LastShip) {
+				switch(LastShip) {						//Case som kollar vilken typ av skepp ska tas bort, och vilken counter ska återställas
 				case "CV":
-					CountCV += 1;
-					if (CountCV > 1) CountCV = 1;
-					ships.remove(ships.size()-1);
-					btnUndo.setEnabled(false);
+					CountCV += 1;						//Återställer CountXX där XX är typen
+					if (CountCV > 1) CountCV = 1;		//Om på något sätt CountXX är större än den ska vara återställ till dess max värde
+					ships.remove(ships.size()-1);		//Ta bort skeppet från ships ArrayList
+					btnUndo.setEnabled(false);			//Stäng av knappen
 					break;
 				case "BB":
 					CountBB += 1;
@@ -236,7 +245,7 @@ public class Battleship {
 					btnUndo.setEnabled(false);
 					break;
 				} 
-				//Ships.remove(Ships.size() - 1);
+				//Repaint
 				panel_Game.repaint();
 			}
 		});
@@ -248,43 +257,43 @@ public class Battleship {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					int shipID = Cursor.whatShip(Cursor.cursorX, Cursor.cursorY);
+					int shipID = Cursor.whatShip(Cursor.cursorX, Cursor.cursorY); 	//vilken skepp har man valt från ShipBuilder?
 					if (mouseOccupied == false) {	
 						switch (shipID) {
 						case 1:
-							if (CountCV != 0) {
-								ghostCV = true;
-								ghostActive = true;
-								mouseOccupied = true;
-								GhostW = ShipBuilder.L_CV;
+							if (CountCV != 0) {  				//Om det finns någon skepp kvar att sätta ut
+								ghostCV = true;					//set ghostXX till true för att rita ut den senare i panel koden		
+								mouseOccupied = true;			//Musen är upptagen, dvs att man ska sätta ut grejer
+								GhostW = ShipBuilder.L_CV;		//GhostW och GhostH är dåvarande Ghosts bredd och höjd i px
 								GhostH = ShipBuilder.ShipW;
+								ghostActive = true;
 							}
 							break;
 						case 2:
 							if (CountBB != 0) {
 								ghostBB = true;
-								ghostActive = true;
 								mouseOccupied = true;
 								GhostW = ShipBuilder.L_BB;
 								GhostH = ShipBuilder.ShipW;
+								ghostActive = true;
 							}
 							break;
 						case 3:
 							if (CountCL != 0) {
 								ghostCL = true;
-								ghostActive = true;
 								mouseOccupied = true;
 								GhostW = ShipBuilder.L_CL;
 								GhostH = ShipBuilder.ShipW;
+								ghostActive = true;
 							}
 							break;
 						case 4:
 							if (CountDD != 0) {
 								ghostDD = true;
-								ghostActive = true;
 								mouseOccupied = true;
 								GhostW = ShipBuilder.L_DD;
 								GhostH = ShipBuilder.ShipW;
+								ghostActive = true;
 							}
 							break;
 						}
@@ -294,39 +303,39 @@ public class Battleship {
 						if (Ship.checkOverlap() == false) {
 							if (ghostCV == true) {	
 								ghostCV = false;
-								ghostActive = false;
 								mouseOccupied = false;
 								Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 								ships.add(CV);
 								CountCV -= 1;
 								LastShip = "CV";
+								ghostActive = false;
 								btnUndo.setEnabled(true);
 							} else if (ghostBB == true) {
 								ghostBB = false;
-								ghostActive = false;
 								mouseOccupied = false;
 								Ship BB = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 								ships.add(BB);
 								CountBB -= 1;
 								LastShip = "BB";
+								ghostActive = false;
 								btnUndo.setEnabled(true);
 							} else if (ghostCL == true) {
 								ghostCL = false;
-								ghostActive = false;
 								mouseOccupied = false;
 								Ship CL = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 								ships.add(CL);
 								CountCL -= 1;
 								LastShip = "CL";
+								ghostActive = false;
 								btnUndo.setEnabled(true);
 							} else if (ghostDD == true) {
 								ghostDD = false;
-								ghostActive = false;
 								mouseOccupied = false;
 								Ship DD = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 								ships.add(DD);
 								CountDD -= 1;
 								LastShip = "DD";
+								ghostActive = false;
 								btnUndo.setEnabled(true);
 							}
 						} else {
@@ -344,7 +353,7 @@ public class Battleship {
 		//KeyListener för knappen R - roterar ghosts
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyReleased(KeyEvent e) {				//Flippa runt värde på GhostW och GhostH 
 				if(e.getKeyCode() == KeyEvent.VK_R) {
 					//Flip H and W to rotate the ghost ship
 					System.out.println(GhostW + " " + GhostH);
@@ -381,7 +390,7 @@ public class Battleship {
 		JButton btnClearBoardP1 = new JButton("Clear Board: P1");
 		btnClearBoardP1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ships.clear();
+				ships.clear();			//ta bort alla skeppar från grid
 				CountCV = 1;
 				CountBB = 2;
 				CountCL = 3;
