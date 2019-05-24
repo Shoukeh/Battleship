@@ -38,7 +38,6 @@ public class Cursor {
 		}
 		return shipID;
 	}
-		
 		/*shipID index:
 		0 = null
 		1 = CV
@@ -58,17 +57,20 @@ public class Cursor {
 				Battleship.cursorShipSelect = false;
 				Cursor.cursorX += 38; 
 			}
+			DebugP1();
 		}
 		
 		public static void cursorRightPreP2() {
-			if (Cursor.cursorX + 38 > 990) {
-				Battleship.cursorShipSelect = true;
-				Cursor.cursorX = 485;
-				Cursor.cursorY = 130;
-			} else {
+			if (Cursor.cursorX_P2 + 38 > 990) {
+				Cursor.cursorX_P2 += 0;
+			} else if (Battleship.cursorShipSelect == true) {
 				Battleship.cursorShipSelect = false;
-				Cursor.cursorX += 38; 
+				Cursor.cursorX_P2 = 620;
+				Cursor.cursorY_P2 = 242;
+			} else {
+				Cursor.cursorX_P2 += 38; 
 			}
+			DebugP2();
 		}
 		
 		//LEFT
@@ -82,10 +84,21 @@ public class Cursor {
 			} else {
 				Cursor.cursorX -= 38; 
 			}
+			DebugP1();
+		}
+		public static void cursorLeftPreP2() {
+			if (Cursor.cursorX_P2 - 38 < 620) {
+				Battleship.cursorShipSelect = true;
+				Cursor.cursorX_P2 = 485;
+				Cursor.cursorY_P2 = 130;
+			} else {
+				Cursor.cursorX_P2 -= 38; 
+			}
+			DebugP2();
 		}
 		
 		//UP
-		public static void cursorUpPre() {
+		public static void cursorUp() {
 			if (Cursor.cursorY - 38 < 0) {
 				Cursor.cursorY += 0; 
 			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY - 70 > 110) {
@@ -96,9 +109,20 @@ public class Cursor {
 				Cursor.cursorY -= 38; 
 			}
 		}
+		public static void cursorUpP2() {
+			if (Cursor.cursorY_P2 - 38 < 0) {
+				Cursor.cursorY_P2 += 0; 
+			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY_P2 - 70 > 110) {
+				Cursor.cursorY_P2 -= 67;
+			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY_P2 - 70 < 110) {
+				Cursor.cursorY_P2 -= 0;
+			} else {
+				Cursor.cursorY_P2 -= 38; 
+			}
+		}
 		
 		//DOWN
-		public static void cursorDownPre() {
+		public static void cursorDown() {
 			if (Cursor.cursorY + 38 > 360) {			
 				Cursor.cursorY += 0; 
 			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY + 70 < 380) {
@@ -109,4 +133,25 @@ public class Cursor {
 				Cursor.cursorY += 38; 
 			}
 		}
+		public static void cursorDownP2() {
+			if (Cursor.cursorY_P2 + 38 > 360) {			
+				Cursor.cursorY_P2 += 0; 
+			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY_P2 + 70 < 380) {
+				Cursor.cursorY_P2 += 67;
+			} else if (Battleship.cursorShipSelect == true && Cursor.cursorY_P2 + 70 > 380) {
+				Cursor.cursorY_P2 += 0;
+			} else if (Battleship.cursorShipSelect == false) {
+				Cursor.cursorY_P2 += 38; 
+			}
+		}
+		
+		//DEBUG kod
+		public static void DebugP1() {
+			System.out.println("DEBUG: P1 pos x: " + Cursor.cursorX + " || y: " + Cursor.cursorY );
+		}
+		
+		public static void DebugP2() {
+			System.out.println("DEBUG: P2 pos x: " + Cursor.cursorX_P2 + " || y: " + Cursor.cursorY_P2 );
+		}
+		
 }

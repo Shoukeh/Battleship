@@ -33,29 +33,52 @@ public class ShipBuilder {
 		gx.fillOval(ShipX, ShipY, L_CV, ShipW);
 	}
 	
-	public static void DrawModels (Graphics gx) {
+	public static void DrawModels (Graphics gx, int ID) {
 		//Metod som ritar skeppar mellan båda grids. 
 		//Ska användas för att "bygga" flottan på grids.
 		ShipX = centerX-(L_CV/2);						//mata in X värdet för skeppet
 		ShipY = centerY-spacer;							//mata in Y värdet för skeppet 
 		DrawCV(gx);										//kalla metoden för att rita ut en skepp, i detta fall en CV (Carrier)
-		gx.drawString("Remaining: " + Battleship.CountCV, TextX, ShipY+45);
+		if (ID == 1) {
+			gx.drawString("Remaining: " + Battleship.CountCV, TextX, ShipY+45);
+		} else if (ID == 3) {
+			gx.drawString("Remaining: " + Battleship.CountCV_P2, TextX, ShipY+45);
+		} else {
+			gx.drawString("Remaining: ?", TextX, ShipY+45);
+		}
 		
 		ShipX = centerX-(L_BB/2);
 		ShipY += spacer;
 		DrawBB(gx);
-		gx.drawString("Remaining: " + Battleship.CountBB, TextX, ShipY+45);
+		if (ID == 1) {
+			gx.drawString("Remaining: " + Battleship.CountBB, TextX, ShipY+45);
+		} else if (ID == 3) {
+			gx.drawString("Remaining: " + Battleship.CountBB_P2, TextX, ShipY+45);
+		} else {
+			gx.drawString("Remaining: ?", TextX, ShipY+45);
+		}
 
 		ShipX = centerX-(L_CL/2);
 		ShipY += spacer;
 		DrawCL(gx);
-		gx.drawString("Remaining: " + Battleship.CountCL, TextX, ShipY+45);
+		if (ID == 1) {
+			gx.drawString("Remaining: " + Battleship.CountCL, TextX, ShipY+45);
+		} else if (ID == 3) {
+			gx.drawString("Remaining: " + Battleship.CountCL_P2, TextX, ShipY+45);
+		} else {
+			gx.drawString("Remaining: ?", TextX, ShipY+45);
+		}
 		
 		ShipX = centerX-(L_DD/2);
 		ShipY += spacer;
 		DrawDD(gx);
-		gx.drawString("Remaining: " + Battleship.CountDD, TextX, ShipY+45);
-		
+		if (ID == 1) {
+			gx.drawString("Remaining: " + Battleship.CountDD, TextX, ShipY+45);
+		} else if (ID == 3) {
+			gx.drawString("Remaining: " + Battleship.CountDD_P2, TextX, ShipY+45);
+		} else {
+			gx.drawString("Remaining: ?", TextX, ShipY+45);
+		}
 	}
 	
 	public static void DrawGhostShip (Graphics gx, int ghostX, int ghostY, int ghostW, int ghostH) { //Metod för att rita "spöken," alltså modellen som ritas för att se vart ma placerar skeppet
