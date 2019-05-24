@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JLabel;
 
 public class Battleship {
 
@@ -128,7 +129,14 @@ public class Battleship {
 				}
 				
 				//Rita Cursor
-				Cursor.drawCursor(gx);
+				switch (PlayerID) {
+					case 1:
+						Cursor.drawCursor(gx);
+						break;
+					case 3:
+						Cursor.drawCursorP2(gx);
+						break;
+				}
 
 				//Set focus to the game panel
 				setFocusable(true);
@@ -392,7 +400,15 @@ public class Battleship {
 		btnRegainFocus.setBounds(550, 6, 117, 29);
 		frmBattleship.getContentPane().add(btnRegainFocus);
 		
-		JButton btnAdvanceState = new JButton("Next Player");
+		JLabel lblInfoP1 = new JLabel("Info P1: Start the game");
+		lblInfoP1.setBounds(141, 11, 193, 16);
+		frmBattleship.getContentPane().add(lblInfoP1);
+		
+		JLabel lblInfoP2 = new JLabel("Info P2: Start the game");
+		lblInfoP2.setBounds(666, 11, 178, 16);
+		frmBattleship.getContentPane().add(lblInfoP2);
+		
+		JButton btnAdvanceState = new JButton("Start");
 		btnAdvanceState.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				/* PlayerID Index:
@@ -402,33 +418,44 @@ public class Battleship {
 				 * 4:SwitchPeriod
 				 */
 				PlayerID += 1;
-				System.out.println(PlayerID);
+				System.out.println("DEBUG: PlayerID = " + PlayerID);
 				switch (PlayerID) {
 					case 1:
 						blocks.clear();
 						Block B1 = new Block(606, 0, 380, 380);
 						blocks.add(B1);
+						btnAdvanceState.setText("Next Turn");
+						lblInfoP1.setText("Info P1: Your Turn");
+						lblInfoP2.setText("Info P2: P1 Turn");
 						panel_Game.repaint();
 						break;
 					case 2:
 						Block B2 = new Block(0, 0, 380, 380);
 						blocks.add(B2);
+						btnAdvanceState.setText("Next Turn");
+						lblInfoP1.setText("Info P1: TURN THE SCREEN");
+						lblInfoP2.setText("Info P2: TURN THE SCREEN");
 						panel_Game.repaint();
 						break;
 					case 3: 
 						blocks.clear();
 						Block B3 = new Block(0, 0, 380, 380);
 						blocks.add(B3);
+						btnAdvanceState.setText("Next Turn");
+						lblInfoP2.setText("Info P2: Your Turn");
+						lblInfoP1.setText("Info P1: P2 Turn");
 						panel_Game.repaint();
 						break;
 					case 4:
 						Block B4 = new Block(606, 0, 380, 380);
 						blocks.add(B4);
 						PlayerID = 0;
+						btnAdvanceState.setText("Next Turn");
+						lblInfoP1.setText("Info P1: TURN THE SCREEN");
+						lblInfoP2.setText("Info P2: TURN THE SCREEN");
 						panel_Game.repaint();
 						break;	
 				}
-				//panel_Game.repaint();
 				
 			}
 		});

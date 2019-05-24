@@ -9,10 +9,18 @@ public class Cursor {
 	static int cursorY = 14;
 	static int cursorD = 10;
 	
+	static int cursorX_P2 = 14+606;
+	static int cursorY_P2 = 14;
+	static int cursorD_P2 = 10;
+	
 	//Method to draw the cursor
 	public static void drawCursor (Graphics gx) {
 		gx.setColor(Color.RED);
 		gx.fillOval(cursorX,cursorY, cursorD, cursorD);
+	}
+	public static void drawCursorP2 (Graphics gx) {
+		gx.setColor(Color.BLUE);
+		gx.fillOval(cursorX_P2, cursorY_P2, cursorD, cursorD);
 	}
 	
 	public static int whatShip(int cx, int cy) {		//metod för att lista ut vilken skepp man valde i ShipBuilder. cx = cursors X coord, cy = cursors Y coord
@@ -32,7 +40,7 @@ public class Cursor {
 	}
 		
 		/*shipID index:
-		0 = null, ERROR
+		0 = null
 		1 = CV
 		2 = BB
 		3 = CL
@@ -43,6 +51,17 @@ public class Cursor {
 		//RIGHT
 		public static void cursorRightPreP1() {
 			if (Cursor.cursorX + 38 > 360) {
+				Battleship.cursorShipSelect = true;
+				Cursor.cursorX = 485;
+				Cursor.cursorY = 130;
+			} else {
+				Battleship.cursorShipSelect = false;
+				Cursor.cursorX += 38; 
+			}
+		}
+		
+		public static void cursorRightPreP2() {
+			if (Cursor.cursorX + 38 > 990) {
 				Battleship.cursorShipSelect = true;
 				Cursor.cursorX = 485;
 				Cursor.cursorY = 130;
