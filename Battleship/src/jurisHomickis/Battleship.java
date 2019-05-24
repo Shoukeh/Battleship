@@ -21,6 +21,7 @@ public class Battleship {
 	static boolean cursorShipSelect = false;
 	static boolean gameStart = false;
 	static int PlayerID = 0;
+	float Turn = -2;
 	
 	//Ghost placement releated booleans
 	static boolean ghostCV = false;
@@ -37,14 +38,14 @@ public class Battleship {
 	
 	//Ship count
 	static int CountCV = 1;
-	static int CountBB = 2;
-	static int CountCL = 3;
-	static int CountDD = 4;
+	static int CountBB = 1;
+	static int CountCL = 1;
+	static int CountDD = 1;
 	
 	static int CountCV_P2 = 1;
-	static int CountBB_P2 = 2;
-	static int CountCL_P2 = 3;
-	static int CountDD_P2 = 4;
+	static int CountBB_P2 = 1;
+	static int CountCL_P2 = 1;
+	static int CountDD_P2 = 1;
 	
 	//Mouse state boolean
 	static boolean mouseOccupied = false;
@@ -90,7 +91,9 @@ public class Battleship {
 		frmBattleship.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmBattleship.getContentPane().setLayout(null);
 		
-		
+		JButton btnClearBoardP1 = new JButton("Clear Board: P1");
+		JButton btnClearBoardP2 = new JButton("Clear Board: P2");
+		JButton btnAdvanceState = new JButton("Start");
 		JPanel panel_Game = new JPanel(){
 			public void paint(Graphics gx) {
 				//Rita Grid för P1
@@ -135,13 +138,25 @@ public class Battleship {
 						Cursor.drawCursorP2(gx);
 						break;
 				}
+				
+				//Start the game
+				if (Turn == 0) {
+					gameStart = true;
+					btnClearBoardP1.setEnabled(false);
+					btnClearBoardP2.setEnabled(false);
+				}
+				
+				//Experiments
+				if (CountCV+CountBB+CountCL+CountDD == 0) btnAdvanceState.setEnabled(true);
+				if ((int)Turn == 0) btnAdvanceState.setEnabled(false);
+				if (CountCV_P2+CountBB_P2+CountCL_P2+CountDD_P2 == 0) btnAdvanceState.setEnabled(true);
 
 				//Set focus to the game panel
 				setFocusable(true);
 				requestFocusInWindow();
 				
 				//DEBUG
-				System.out.println("DEBUG: panel code exec");	
+				System.out.println("INFO: Turn: "+(int)Turn+"\nDEBUG: panel code exec");	
 			}	
 		};
 
@@ -159,7 +174,11 @@ public class Battleship {
 							Cursor.cursorRightPreP2();
 						}
 					} else {
-						
+						if(PlayerID == 1) {
+							Cursor.cursorRightP1();
+						} else if (PlayerID == 3) {
+							Cursor.cursorRightP2();
+						}
 					}
 					//Repaint
 					panel_Game.repaint();
@@ -181,7 +200,11 @@ public class Battleship {
 							Cursor.cursorLeftPreP2();
 						}
 					} else {
-						
+						if(PlayerID == 1) {
+							Cursor.cursorLeftP1();
+						} else if (PlayerID == 3) {
+							Cursor.cursorLeftP2();
+						}
 					}
 					//Repaint
 					panel_Game.repaint();
@@ -304,166 +327,135 @@ public class Battleship {
 					int shipID_P2 = Cursor.whatShip(Cursor.cursorX_P2, Cursor.cursorY_P2);
 					if (mouseOccupied == false) {
 						if (PlayerID == 1) {
+							mouseOccupied = true;						//Musen är upptagen, dvs att man ska sätta ut grejer
+							ghostActive = true;
 							switch (shipID) {
 							case 1:
 								if (CountCV != 0) {  				//Om det finns någon skepp kvar att sätta ut
 									ghostCV = true;					//set ghostXX till true för att rita ut den senare i panel koden		
-									mouseOccupied = true;			//Musen är upptagen, dvs att man ska sätta ut grejer
 									GhostW = ShipBuilder.L_CV;		//GhostW och GhostH är dåvarande Ghosts bredd och höjd i px
 									GhostH = ShipBuilder.ShipW;
-									ghostActive = true;
 								}
 								break;
 							case 2:
 								if (CountBB != 0) {
 									ghostBB = true;
-									mouseOccupied = true;
 									GhostW = ShipBuilder.L_BB;
 									GhostH = ShipBuilder.ShipW;
-									ghostActive = true;
 								}
 								break;
 							case 3:
 								if (CountCL != 0) {
 									ghostCL = true;
-									mouseOccupied = true;
 									GhostW = ShipBuilder.L_CL;
 									GhostH = ShipBuilder.ShipW;
-									ghostActive = true;
 								}
 								break;
 							case 4:
 								if (CountDD != 0) {
 									ghostDD = true;
-									mouseOccupied = true;
 									GhostW = ShipBuilder.L_DD;
 									GhostH = ShipBuilder.ShipW;
-									ghostActive = true;
 								}
 								break;
 							}
 						} else if (PlayerID == 3) {
+							mouseOccupied = true;						//Musen är upptagen, dvs att man ska sätta ut grejer
+							ghostActive = true;
 							switch (shipID_P2) {
 							case 1:
 								if (CountCV_P2 != 0) {  				//Om det finns någon skepp kvar att sätta ut
-									ghostCV = true;					//set ghostXX till true för att rita ut den senare i panel koden		
-									mouseOccupied = true;			//Musen är upptagen, dvs att man ska sätta ut grejer
-									GhostW = ShipBuilder.L_CV;		//GhostW och GhostH är dåvarande Ghosts bredd och höjd i px
+									ghostCV = true;						//set ghostXX till true för att rita ut den senare i panel koden		
+									GhostW = ShipBuilder.L_CV;			//GhostW och GhostH är dåvarande Ghosts bredd och höjd i px
 									GhostH = ShipBuilder.ShipW;
-									ghostActive = true;
 								}
 								break;
 							case 2:
 								if (CountBB_P2 != 0) {
 									ghostBB = true;
-									mouseOccupied = true;
 									GhostW = ShipBuilder.L_BB;
 									GhostH = ShipBuilder.ShipW;
-									ghostActive = true;
 								}
 								break;
 							case 3:
 								if (CountCL_P2 != 0) {
 									ghostCL = true;
-									mouseOccupied = true;
 									GhostW = ShipBuilder.L_CL;
 									GhostH = ShipBuilder.ShipW;
-									ghostActive = true;
 								}
 								break;
 							case 4:
-								if (CountDD != 0) {
+								if (CountDD_P2 != 0) {
 									ghostDD = true;
-									mouseOccupied = true;
 									GhostW = ShipBuilder.L_DD;
 									GhostH = ShipBuilder.ShipW;
-									ghostActive = true;
 								}
 								break;
 							}
 						}
-						
 					} else if (mouseOccupied == true){
 						if (PlayerID == 1) {	
 							if (Ship.checkOverlap() == false) {
+								mouseOccupied = false;
+								ghostActive = false;
+								btnUndo.setEnabled(true);
 								if (ghostCV == true) {	
 									ghostCV = false;
-									mouseOccupied = false;
 									Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 									ships.add(CV);
 									CountCV -= 1;
 									LastShip = "CV";
-									ghostActive = false;
-									btnUndo.setEnabled(true);
 								} else if (ghostBB == true) {
 									ghostBB = false;
-									mouseOccupied = false;
 									Ship BB = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 									ships.add(BB);
 									CountBB -= 1;
 									LastShip = "BB";
-									ghostActive = false;
-									btnUndo.setEnabled(true);
 								} else if (ghostCL == true) {
 									ghostCL = false;
-									mouseOccupied = false;
 									Ship CL = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 									ships.add(CL);
 									CountCL -= 1;
 									LastShip = "CL";
-									ghostActive = false;
-									btnUndo.setEnabled(true);
 								} else if (ghostDD == true) {
 									ghostDD = false;
-									mouseOccupied = false;
 									Ship DD = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
 									ships.add(DD);
 									CountDD -= 1;
 									LastShip = "DD";
-									ghostActive = false;
-									btnUndo.setEnabled(true);
 								}
 							} else {
 								System.out.println("DEBUG: Placement fail");
 							}
 						} else if (PlayerID == 3) {
 							if (Ship.checkOverlap_P2() == false) {
+								mouseOccupied = false;
+								ghostActive = false;
+								btnUndo.setEnabled(true);
 								if (ghostCV == true) {	
 									ghostCV = false;
-									mouseOccupied = false;
 									Ship CV = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
 									ships_P2.add(CV);
 									CountCV_P2 -= 1;
 									LastShip = "CV";
-									ghostActive = false;
-									btnUndo.setEnabled(true);
 								} else if (ghostBB == true) {
 									ghostBB = false;
-									mouseOccupied = false;
 									Ship BB = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
 									ships_P2.add(BB);
 									CountBB_P2 -= 1;
 									LastShip = "BB";
-									ghostActive = false;
-									btnUndo.setEnabled(true);
 								} else if (ghostCL == true) {
 									ghostCL = false;
-									mouseOccupied = false;
 									Ship CL = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
 									ships_P2.add(CL);
 									CountCL_P2 -= 1;
 									LastShip = "CL";
-									ghostActive = false;
-									btnUndo.setEnabled(true);
 								} else if (ghostDD == true) {
 									ghostDD = false;
-									mouseOccupied = false;
 									Ship DD = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
 									ships_P2.add(DD);
 									CountDD_P2 -= 1;
 									LastShip = "DD";
-									ghostActive = false;
-									btnUndo.setEnabled(true);
 								}
 							} else {
 								System.out.println("DEBUG: Placement fail");
@@ -496,9 +488,6 @@ public class Battleship {
 			}
 		});
 		
-		
-		
-		
 		panel_Game.setBounds(6, 37, 988, 381);
 		frmBattleship.getContentPane().add(panel_Game);
 		panel_Game.setLayout(null);
@@ -515,7 +504,6 @@ public class Battleship {
 		lblInfoP2.setBounds(666, 11, 178, 16);
 		frmBattleship.getContentPane().add(lblInfoP2);
 		
-		JButton btnAdvanceState = new JButton("Start");
 		btnAdvanceState.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				/* PlayerID Index:
@@ -525,6 +513,7 @@ public class Battleship {
 				 * 4:SwitchPeriod
 				 */
 				PlayerID += 1;
+				Turn += 0.5;
 				System.out.println("DEBUG: PlayerID = " + PlayerID);
 				switch (PlayerID) {
 					case 1:
@@ -534,7 +523,8 @@ public class Battleship {
 						btnAdvanceState.setText("Next Turn");
 						lblInfoP1.setText("Info P1: Your Turn");
 						lblInfoP2.setText("Info P2: P1 Turn");
-						panel_Game.repaint();
+						if (Turn < 0) btnAdvanceState.setEnabled(false);
+						btnClearBoardP2.setEnabled(false);
 						break;
 					case 2:
 						Block B2 = new Block(0, 0, 380, 380);
@@ -542,7 +532,10 @@ public class Battleship {
 						btnAdvanceState.setText("Next Turn");
 						lblInfoP1.setText("Info P1: TURN THE SCREEN");
 						lblInfoP2.setText("Info P2: TURN THE SCREEN");
-						panel_Game.repaint();
+						btnUndo.setEnabled(false);
+						btnClearBoardP1.setEnabled(false);
+						btnClearBoardP2.setEnabled(true);
+						
 						break;
 					case 3: 
 						blocks.clear();
@@ -551,7 +544,6 @@ public class Battleship {
 						btnAdvanceState.setText("Next Turn");
 						lblInfoP2.setText("Info P2: Your Turn");
 						lblInfoP1.setText("Info P1: P2 Turn");
-						panel_Game.repaint();
 						break;
 					case 4:
 						Block B4 = new Block(606, 0, 380, 380);
@@ -560,16 +552,15 @@ public class Battleship {
 						btnAdvanceState.setText("Next Turn");
 						lblInfoP1.setText("Info P1: TURN THE SCREEN");
 						lblInfoP2.setText("Info P2: TURN THE SCREEN");
-						panel_Game.repaint();
+						btnUndo.setEnabled(false);
 						break;	
 				}
-				
+				panel_Game.repaint();
 			}
 		});
 		btnAdvanceState.setBounds(331, 6, 117, 29);
 		frmBattleship.getContentPane().add(btnAdvanceState);
 		
-		JButton btnClearBoardP1 = new JButton("Clear Board: P1");
 		btnClearBoardP1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ships.clear();			//ta bort alla skeppar från grid
@@ -583,7 +574,6 @@ public class Battleship {
 		btnClearBoardP1.setBounds(6, 6, 136, 29);
 		frmBattleship.getContentPane().add(btnClearBoardP1);
 		
-		JButton btnClearBoardP2 = new JButton("Clear Board: P2");
 		btnClearBoardP2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ships_P2.clear();			//ta bort alla skeppar från grid

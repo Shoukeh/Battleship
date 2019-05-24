@@ -59,7 +59,6 @@ public class Cursor {
 			}
 			DebugP1();
 		}
-		
 		public static void cursorRightPreP2() {
 			if (Cursor.cursorX_P2 + 38 > 990) {
 				Cursor.cursorX_P2 += 0;
@@ -69,6 +68,22 @@ public class Cursor {
 				Cursor.cursorY_P2 = 242;
 			} else {
 				Cursor.cursorX_P2 += 38; 
+			}
+			DebugP2();
+		}
+		public static void cursorRightP1() {
+			if (Cursor.cursorX + 38 > 360) {
+				Cursor.cursorX += 0; 
+			} else {
+				Cursor.cursorX += 38; 
+			}
+			DebugP1();
+		}
+		public static void cursorRightP2() {
+			if (Cursor.cursorX + 38 > 990) {
+				Cursor.cursorX += 0; 
+			} else {
+				Cursor.cursorX += 38; 
 			}
 			DebugP2();
 		}
@@ -91,6 +106,22 @@ public class Cursor {
 				Battleship.cursorShipSelect = true;
 				Cursor.cursorX_P2 = 485;
 				Cursor.cursorY_P2 = 130;
+			} else {
+				Cursor.cursorX_P2 -= 38; 
+			}
+			DebugP2();
+		}
+		public static void cursorLeftP1() {
+			if (Cursor.cursorX - 38 < 0) {
+				Cursor.cursorX += 0; 
+			} else {
+				Cursor.cursorX -= 38; 
+			}
+			DebugP1();
+		}
+		public static void cursorLeftP2() {
+			if (Cursor.cursorX_P2 - 38 < 620) {
+				Cursor.cursorX_P2 += 0;
 			} else {
 				Cursor.cursorX_P2 -= 38; 
 			}
