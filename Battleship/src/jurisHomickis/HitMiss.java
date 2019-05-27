@@ -60,7 +60,7 @@ public class HitMiss {
 					}
 				}
 			} else if (Battleship.PlayerID == 3) {
-				for (int i = 0; i < Battleship.ships_P2.size(); i++) {
+				for (int i = 0; i < Battleship.ships.size(); i++) {
 					if (Cursor.cursorX_P2-606 > Battleship.ships.get(i).x-11 && Cursor.cursorX_P2-606 < Battleship.ships.get(i).x-11+Battleship.ships.get(i).w) {
 						if (Cursor.cursorY_P2 > Battleship.ships.get(i).y - 11 && Cursor.cursorY_P2 < Battleship.ships.get(i).y - 11 + Battleship.ships.get(i).h) {
 							hit = 2;

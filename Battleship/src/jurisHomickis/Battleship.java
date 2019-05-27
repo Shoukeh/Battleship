@@ -57,6 +57,9 @@ public class Battleship {
 	static ArrayList<Ship> ships = new ArrayList<Ship>();
 	static ArrayList<Ship> ships_P2 = new ArrayList<Ship>();
 	
+	static ArrayList<Ship> shipsSunk = new ArrayList<Ship>();
+	static ArrayList<Ship> shipsSunk_P2 = new ArrayList<Ship>();
+	
 	//Arrays med alla "hits" och "miss"
 	static ArrayList<HitMiss> markers = new ArrayList<HitMiss>();
 	static ArrayList<HitMiss> markers_P2 = new ArrayList<HitMiss>();
@@ -111,6 +114,13 @@ public class Battleship {
 				Grid.WH = 10;
 				Grid.DrawGrid(gx);
 				
+				//Start the game
+				if (Turn == 0) {
+					gameStart = true;
+					btnClearBoardP1.setEnabled(false);
+					btnClearBoardP2.setEnabled(false);
+				}
+				
 				//Rita "ship builder" meny:
 				ShipBuilder.DrawModels(gx, PlayerID);
 				
@@ -122,14 +132,43 @@ public class Battleship {
 						ShipBuilder.DrawGhostShip(gx, Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
 					}
 				}
-				//Rita skeppar
-				for (int i = 0; i < ships.size(); i++) {
-					ships.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships
-				}
-				for (int i = 0; i < ships_P2.size(); i++) {
-					ships_P2.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships_P2
+				
+				if (gameStart == true) {
+					for (int i = 0; i < ships.size(); i++) {
+						if (ships.get(i).hp == 0) {
+							ships.get(i).x += 606;
+							shipsSunk.add(ships.remove(i));
+						}
+					}
+					for (int i = 0; i < ships_P2.size(); i++) {
+						if (ships_P2.get(i).hp == 0) {
+							ships_P2.get(i).x -= 606;
+							shipsSunk_P2.add(ships_P2.remove(i));
+						}
+					}
+					switch (PlayerID) {
+						case 1:
+							for (int j = 0; j < shipsSunk_P2.size(); j++) {
+								shipsSunk_P2.get(j).paintShip(gx);
+							}
+							break;
+						case 3:
+							for (int j = 0; j < shipsSunk.size(); j++) {
+								shipsSunk.get(j).paintShip(gx);
+							}
+							break;
+					}
 				}
 				
+				//Rita skeppar
+				if (gameStart == false) {
+					for (int i = 0; i < ships.size(); i++) {
+						ships.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships
+					}
+					for (int i = 0; i < ships_P2.size(); i++) {
+						ships_P2.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships_P2
+					}
+				}
 				for (int i = 0; i < blocks.size(); i++) {
 					blocks.get(i).SwitchTurn(gx);		//rita ut "blocks" som gör så att andra spelaren inte ser fiendets grid
 				}
@@ -158,17 +197,12 @@ public class Battleship {
 						break;
 				}
 				
-				//Start the game
-				if (Turn == 0) {
-					gameStart = true;
-					btnClearBoardP1.setEnabled(false);
-					btnClearBoardP2.setEnabled(false);
-				}
-				
 				//Experiments
-				if (CountCV+CountBB+CountCL+CountDD == 0) btnAdvanceState.setEnabled(true);
-				if ((int)Turn == 0) btnAdvanceState.setEnabled(false);
-				if (CountCV_P2+CountBB_P2+CountCL_P2+CountDD_P2 == 0) btnAdvanceState.setEnabled(true);
+				if (gameStart == false) {
+					if (CountCV+CountBB+CountCL+CountDD == 0) btnAdvanceState.setEnabled(true);
+					if ((int)Turn == 0) btnAdvanceState.setEnabled(false);
+					if (CountCV_P2+CountBB_P2+CountCL_P2+CountDD_P2 == 0) btnAdvanceState.setEnabled(true);
+				}
 
 				//Set focus to the game panel
 				setFocusable(true);
@@ -497,6 +531,7 @@ public class Battleship {
 						}
 					} else {
 						if (turnDone == false) {
+							btnAdvanceState.setEnabled(false);
 							switch (HitMiss.HitOrMiss()) {
 								case 0:
 									break;
@@ -510,6 +545,8 @@ public class Battleship {
 										markers_P2.add(miss);
 									}
 									turnDone = true;
+									btnAdvanceState.setEnabled(true);
+									
 									break;
 								case 2:
 									if (PlayerID == 1) {
@@ -520,7 +557,8 @@ public class Battleship {
 										HitMiss hit = new HitMiss(Cursor.cursorX_P2, Cursor.cursorY_P2, true);
 										markers_P2.add(hit);
 									}
-									turnDone = true;
+									turnDone = false;
+									btnAdvanceState.setEnabled(false);
 									break;
 							}
 						}
@@ -578,17 +616,19 @@ public class Battleship {
 				switch (PlayerID) {
 					case 1:
 						blocks.clear();
-						Block B1 = new Block(606, 0, 380, 380);
-						blocks.add(B1);
+						//Block B1 = new Block(606, 0, 380, 380);
+						//blocks.add(B1);
 						btnAdvanceState.setText("Next Turn");
 						lblInfoP1.setText("Info P1: Your Turn");
 						lblInfoP2.setText("Info P2: P1 Turn");
-						if (Turn < 0) btnAdvanceState.setEnabled(false);
+						btnAdvanceState.setEnabled(false);
 						btnClearBoardP2.setEnabled(false);
 						break;
 					case 2:
 						Block B2 = new Block(0, 0, 380, 380);
 						blocks.add(B2);
+						Block B1 = new Block(606, 0, 380, 380);
+						blocks.add(B1);
 						btnAdvanceState.setText("Next Turn");
 						lblInfoP1.setText("Info P1: TURN THE SCREEN");
 						lblInfoP2.setText("Info P2: TURN THE SCREEN");
@@ -599,15 +639,18 @@ public class Battleship {
 						break;
 					case 3: 
 						blocks.clear();
-						Block B3 = new Block(0, 0, 380, 380);
-						blocks.add(B3);
+						//Block B3 = new Block(0, 0, 380, 380);
+						//blocks.add(B3);
 						btnAdvanceState.setText("Next Turn");
 						lblInfoP2.setText("Info P2: Your Turn");
 						lblInfoP1.setText("Info P1: P2 Turn");
+						btnAdvanceState.setEnabled(false);
 						break;
 					case 4:
 						Block B4 = new Block(606, 0, 380, 380);
 						blocks.add(B4);
+						Block B3 = new Block(0, 0, 380, 380);
+						blocks.add(B3);
 						PlayerID = 0;
 						btnAdvanceState.setText("Next Turn");
 						lblInfoP1.setText("Info P1: TURN THE SCREEN");
