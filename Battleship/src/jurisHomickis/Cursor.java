@@ -80,10 +80,10 @@ public class Cursor {
 			DebugP1();
 		}
 		public static void cursorRightP2() {
-			if (Cursor.cursorX + 38 > 990) {
-				Cursor.cursorX += 0; 
+			if (Cursor.cursorX_P2 + 38 > 990) {
+				Cursor.cursorX_P2 += 0; 
 			} else {
-				Cursor.cursorX += 38; 
+				Cursor.cursorX_P2 += 38; 
 			}
 			DebugP2();
 		}
