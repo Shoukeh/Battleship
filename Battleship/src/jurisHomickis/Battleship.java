@@ -23,6 +23,7 @@ public class Battleship {
 	static int PlayerID = 0;
 	float Turn = -2;
 	boolean turnDone = false;
+	boolean win = false;
 	
 	//Ghost placement releated booleans
 	static boolean ghostCV = false;
@@ -39,14 +40,17 @@ public class Battleship {
 	
 	//Ship count
 	static int CountCV = 1;
-	static int CountBB = 1;
-	static int CountCL = 1;
-	static int CountDD = 1;
+	static int CountBB = 2;
+	static int CountCL = 3;
+	static int CountDD = 4;
 	
 	static int CountCV_P2 = 1;
-	static int CountBB_P2 = 1;
-	static int CountCL_P2 = 1;
-	static int CountDD_P2 = 1;
+	static int CountBB_P2 = 2;
+	static int CountCL_P2 = 3;
+	static int CountDD_P2 = 4;
+	
+	static int CountEnemy = 10; 
+	static int CountEnemy_P2 = 10;
 	
 	//Mouse state boolean
 	static boolean mouseOccupied = false;
@@ -57,14 +61,17 @@ public class Battleship {
 	static ArrayList<Ship> ships = new ArrayList<Ship>();
 	static ArrayList<Ship> ships_P2 = new ArrayList<Ship>();
 	
-	static ArrayList<Ship> shipsSunk = new ArrayList<Ship>();
-	static ArrayList<Ship> shipsSunk_P2 = new ArrayList<Ship>();
+	ArrayList<Ship> shipsClone = new ArrayList<Ship>();
+	ArrayList<Ship> shipsClone_P2 = new ArrayList<Ship>();
+	
+	ArrayList<Ship> shipsSunk = new ArrayList<Ship>();
+	ArrayList<Ship> shipsSunk_P2 = new ArrayList<Ship>();
 	
 	//Arrays med alla "hits" och "miss"
 	static ArrayList<HitMiss> markers = new ArrayList<HitMiss>();
 	static ArrayList<HitMiss> markers_P2 = new ArrayList<HitMiss>();
 	
-	static ArrayList<Block> blocks = new ArrayList<Block>();
+	ArrayList<Block> blocks = new ArrayList<Block>();
 
 	/**
 	 * Launch the application.
@@ -114,6 +121,13 @@ public class Battleship {
 				Grid.WH = 10;
 				Grid.DrawGrid(gx);
 				
+				//kolla om någon vann
+				if (CountEnemy == 0 || CountEnemy_P2 == 0) {
+					win = true;
+					if (CountEnemy == 0) gx.drawString("Player 1 WINS", 451, 30);
+					if (CountEnemy_P2 == 0) gx.drawString("Player 2 WINS", 451, 30);
+				}
+ 				
 				//Start the game
 				if (Turn == 0) {
 					gameStart = true;
@@ -138,12 +152,14 @@ public class Battleship {
 						if (ships.get(i).hp == 0) {
 							ships.get(i).x += 606;
 							shipsSunk.add(ships.remove(i));
+							CountEnemy_P2 -= 1;
 						}
 					}
 					for (int i = 0; i < ships_P2.size(); i++) {
 						if (ships_P2.get(i).hp == 0) {
 							ships_P2.get(i).x -= 606;
 							shipsSunk_P2.add(ships_P2.remove(i));
+							CountEnemy -= 1;
 						}
 					}
 					switch (PlayerID) {
@@ -162,29 +178,38 @@ public class Battleship {
 				
 				//Rita skeppar
 				if (gameStart == false) {
-					for (int i = 0; i < ships.size(); i++) {
-						ships.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships
+					if (PlayerID == 1) {
+						for (int i = 0; i < ships.size(); i++) {
+							ships.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships
+						}
+					} else if (PlayerID == 3){
+						for (int i = 0; i < ships_P2.size(); i++) {
+							ships_P2.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships_P2
+						}
 					}
-					for (int i = 0; i < ships_P2.size(); i++) {
-						ships_P2.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships_P2
+				} else if (gameStart == true) {
+					if (PlayerID == 1) {
+						for (int i = 0; i < shipsClone.size(); i++) {
+							shipsClone.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships
+						}
+					} else if (PlayerID == 3){
+						for (int i = 0; i < shipsClone_P2.size(); i++) {
+							shipsClone_P2.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships_P2
+						}
 					}
-				}
-				for (int i = 0; i < blocks.size(); i++) {
-					blocks.get(i).SwitchTurn(gx);		//rita ut "blocks" som gör så att andra spelaren inte ser fiendets grid
 				}
 				
 				//Rita HitMiss markers
-				switch (PlayerID) {
-				case 1:
-					for (int i = 0; i < markers.size(); i++) {
-						markers.get(i).paintHitMiss(gx);
-					}
-					break;
-				case 3:
-					for (int i = 0; i < markers_P2.size(); i++) {
-						markers_P2.get(i).paintHitMiss(gx);
-					}
-					break;
+				for (int i = 0; i < markers.size(); i++) {
+					markers.get(i).paintHitMiss(gx);
+				}
+				for (int i = 0; i < markers_P2.size(); i++) {
+					markers_P2.get(i).paintHitMiss(gx);
+				}
+				
+				//Rita "blocks"
+				for (int i = 0; i < blocks.size(); i++) {
+					blocks.get(i).SwitchTurn(gx);		//rita ut "blocks" som gör så att andra spelaren inte ser fiendets grid
 				}
 				
 				//Rita Cursor
@@ -353,13 +378,13 @@ public class Battleship {
 					case "CL":
 						CountCL_P2 += 1;
 						if (CountCL_P2 > 3) CountCL_P2 = 3;
-						ships.remove(ships_P2.size()-1);
+						ships_P2.remove(ships_P2.size()-1);
 						btnUndo.setEnabled(false);
 						break;
 					case "DD":
 						CountDD_P2 += 1;
 						if (CountDD_P2 > 4) CountDD_P2 = 4;
-						ships.remove(ships_P2.size()-1);
+						ships_P2.remove(ships_P2.size()-1);
 						btnUndo.setEnabled(false);
 						break;
 					} 
@@ -457,32 +482,40 @@ public class Battleship {
 									btnUndo.setEnabled(true);
 									if (ghostCV == true) {	
 										ghostCV = false;
-										Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+										Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH, 1);
 										ships.add(CV);
+										Ship CVcopy = new Ship(Cursor.cursorX+606, Cursor.cursorY, GhostW, GhostH, 1);
+										shipsClone.add(CVcopy);
 										CountCV -= 1;
 										LastShip = "CV";
 										mouseOccupied = false;
 										ghostActive = false;
 									} else if (ghostBB == true) {
 										ghostBB = false;
-										Ship BB = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+										Ship BB = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH, 2);
 										ships.add(BB);
+										Ship BBcopy = new Ship(Cursor.cursorX+606, Cursor.cursorY, GhostW, GhostH, 2);
+										shipsClone.add(BBcopy);
 										CountBB -= 1;
 										LastShip = "BB";
 										mouseOccupied = false;
 										ghostActive = false;
 									} else if (ghostCL == true) {
 										ghostCL = false;
-										Ship CL = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+										Ship CL = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH, 3);
 										ships.add(CL);
+										Ship CLcopy = new Ship(Cursor.cursorX+606, Cursor.cursorY, GhostW, GhostH, 3);
+										shipsClone.add(CLcopy);
 										CountCL -= 1;
 										LastShip = "CL";
 										mouseOccupied = false;
 										ghostActive = false;
 									} else if (ghostDD == true) {
 										ghostDD = false;
-										Ship DD = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH);
+										Ship DD = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH, 4);
 										ships.add(DD);
+										Ship CLcopy = new Ship(Cursor.cursorX+606, Cursor.cursorY, GhostW, GhostH, 4);
+										shipsClone.add(CLcopy);
 										CountDD -= 1;
 										LastShip = "DD";
 										mouseOccupied = false;
@@ -498,26 +531,34 @@ public class Battleship {
 									btnUndo.setEnabled(true);
 									if (ghostCV == true) {	
 										ghostCV = false;
-										Ship CV = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
+										Ship CV = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH, 1);
 										ships_P2.add(CV);
+										Ship CVcopy = new Ship(Cursor.cursorX_P2-606, Cursor.cursorY_P2, GhostW, GhostH, 1);
+										shipsClone_P2.add(CVcopy);
 										CountCV_P2 -= 1;
 										LastShip = "CV";
 									} else if (ghostBB == true) {
 										ghostBB = false;
-										Ship BB = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
+										Ship BB = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH, 2);
 										ships_P2.add(BB);
+										Ship BBcopy = new Ship(Cursor.cursorX_P2-606, Cursor.cursorY_P2, GhostW, GhostH, 2);
+										shipsClone_P2.add(BBcopy);
 										CountBB_P2 -= 1;
 										LastShip = "BB";
 									} else if (ghostCL == true) {
 										ghostCL = false;
-										Ship CL = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
+										Ship CL = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH, 3);
 										ships_P2.add(CL);
+										Ship CLcopy = new Ship(Cursor.cursorX_P2-606, Cursor.cursorY_P2, GhostW, GhostH, 3);
+										shipsClone_P2.add(CLcopy);
 										CountCL_P2 -= 1;
 										LastShip = "CL";
 									} else if (ghostDD == true) {
 										ghostDD = false;
-										Ship DD = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH);
+										Ship DD = new Ship(Cursor.cursorX_P2, Cursor.cursorY_P2, GhostW, GhostH, 4);
 										ships_P2.add(DD);
+										Ship CLcopy = new Ship(Cursor.cursorX_P2-606, Cursor.cursorY_P2, GhostW, GhostH, 4);
+										shipsClone_P2.add(CLcopy);
 										CountDD_P2 -= 1;
 										LastShip = "DD";
 									}
@@ -634,7 +675,7 @@ public class Battleship {
 						lblInfoP2.setText("Info P2: TURN THE SCREEN");
 						btnUndo.setEnabled(false);
 						btnClearBoardP1.setEnabled(false);
-						btnClearBoardP2.setEnabled(true);
+						if (Turn < 0) btnClearBoardP2.setEnabled(true);
 						
 						break;
 					case 3: 

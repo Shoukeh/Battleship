@@ -13,13 +13,15 @@ public class Cursor {
 	static int cursorY_P2 = 14;
 	static int cursorD_P2 = 10;
 	
+	static Color orangered = new Color (255, 180, 0);
+	
 	//Method to draw the cursor
 	public static void drawCursor (Graphics gx) {
-		gx.setColor(Color.RED);
+		gx.setColor(orangered);
 		gx.fillOval(cursorX,cursorY, cursorD, cursorD);
 	}
 	public static void drawCursorP2 (Graphics gx) {
-		gx.setColor(Color.BLUE);
+		gx.setColor(Color.GREEN);
 		gx.fillOval(cursorX_P2, cursorY_P2, cursorD, cursorD);
 	}
 	

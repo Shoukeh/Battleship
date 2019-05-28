@@ -5,11 +5,25 @@ import java.awt.Graphics;
 
 public class Ship {
 	
-	int hp, w, x, y, h;
+	int hp, w, x, y, h, ID;
 	
 	
-	public Ship (int x, int y, int w, int h) {
-		this.hp = w/30;
+	public Ship (int x, int y, int w, int h, int ID) {
+		this.ID = ID;
+		switch (ID) {
+		 case 1:
+			 this.hp = 4;
+			 break;
+		 case 2:
+			 this.hp = 3;
+			 break;
+		 case 3:
+			 this.hp = 2;
+			 break;
+		 case 4:
+			 this.hp = 1;
+			 break;
+		}
 		this.w = w;
 		this.h = h;
 		this.x = x;

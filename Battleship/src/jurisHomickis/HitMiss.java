@@ -22,7 +22,7 @@ public class HitMiss {
 			gx.fillRect(xx+1, yy-11, 9, w);
 		} else {
 			this.w = 16;
-			gx.setColor(Color.CYAN);
+			gx.setColor(Color.BLUE);
 			gx.fillOval(xx-3, yy-3, w, w);
 		}
 	}
