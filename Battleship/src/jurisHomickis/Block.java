@@ -13,6 +13,8 @@ public class Block {
 		this.x = x;
 		this.y = y;
 	}
+	
+	//rita ut skärmar
 	public void SwitchTurn(Graphics gx) {
 		gx.setColor(Color.GRAY);
 		gx.fillRect(x, y, h, w);

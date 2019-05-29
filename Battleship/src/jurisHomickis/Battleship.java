@@ -71,6 +71,7 @@ public class Battleship {
 	static ArrayList<HitMiss> markers = new ArrayList<HitMiss>();
 	static ArrayList<HitMiss> markers_P2 = new ArrayList<HitMiss>();
 	
+	//Array med alla skärmar
 	ArrayList<Block> blocks = new ArrayList<Block>();
 
 	/**
@@ -106,6 +107,7 @@ public class Battleship {
 		frmBattleship.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmBattleship.getContentPane().setLayout(null);
 		
+		//init av knappar
 		JButton btnClearBoardP1 = new JButton("Clear Board: P1");
 		JButton btnClearBoardP2 = new JButton("Clear Board: P2");
 		JButton btnAdvanceState = new JButton("Start");
@@ -147,6 +149,8 @@ public class Battleship {
 					}
 				}
 				
+				//Kolla om ett skepp är sjunkit, och rita ut den i fall den är det.
+				//skeppet flyttas från en array list till en annan, som sen ritas ut.
 				if (gameStart == true) {
 					for (int i = 0; i < ships.size(); i++) {
 						if (ships.get(i).hp == 0) {
@@ -162,6 +166,7 @@ public class Battleship {
 							CountEnemy -= 1;
 						}
 					}
+					//rita ut nedsänkta skepp
 					switch (PlayerID) {
 						case 1:
 							for (int j = 0; j < shipsSunk_P2.size(); j++) {
@@ -176,7 +181,7 @@ public class Battleship {
 					}
 				}
 				
-				//Rita skeppar
+				//Rita skepp
 				if (gameStart == false) {
 					if (PlayerID == 1) {
 						for (int i = 0; i < ships.size(); i++) {
@@ -188,6 +193,7 @@ public class Battleship {
 						}
 					}
 				} else if (gameStart == true) {
+					//rita ut skepp på andra grid för att se var den andra spelaren har träffat eller missat efter spelet har startats.
 					if (PlayerID == 1) {
 						for (int i = 0; i < shipsClone.size(); i++) {
 							shipsClone.get(i).paintShip(gx);		//rita ut alla skeppar som finns med i ArrayList ships
@@ -238,7 +244,7 @@ public class Battleship {
 			}	
 		};
 
-		/* KOD FÖR CURSORs FÖRFLYTTNING */
+		/* KOD FÖR CURSORS FÖRFLYTTNING */
 		//Kod för att hantera cursor x+ riktning 
 		panel_Game.addKeyListener(new KeyAdapter() {
 			@Override
@@ -476,19 +482,21 @@ public class Battleship {
 							System.out.println("DEBUG: shipID = " + shipID);
 						} else if (mouseOccupied == true){
 							if (PlayerID == 1) {	
-								if (Ship.checkOverlap() == false) {
-									mouseOccupied = false;
+								if (Ship.checkOverlap() == false) { 		//Kolla om man kan ens placera skeppet
+									mouseOccupied = false;					//musen är inte upptagen längre
 									ghostActive = false;
 									btnUndo.setEnabled(true);
+									//Lägga ut ett skepp och skapa en objekt till två arrays med skeppets X och Y koordinater, samt storlek och ID
 									if (ghostCV == true) {	
 										ghostCV = false;
 										Ship CV = new Ship(Cursor.cursorX, Cursor.cursorY, GhostW, GhostH, 1);
 										ships.add(CV);
 										Ship CVcopy = new Ship(Cursor.cursorX+606, Cursor.cursorY, GhostW, GhostH, 1);
 										shipsClone.add(CVcopy);
+										//minska antalet skepp man kan lägga ut av denna typen
 										CountCV -= 1;
 										LastShip = "CV";
-										mouseOccupied = false;
+										mouseOccupied = false; 
 										ghostActive = false;
 									} else if (ghostBB == true) {
 										ghostBB = false;
@@ -524,7 +532,7 @@ public class Battleship {
 								} else {
 									System.out.println("DEBUG: Placement fail");
 								}
-							} else if (PlayerID == 3) {
+							} else if (PlayerID == 3) {					//samma kod fast för andra spelarens
 								if (Ship.checkOverlap_P2() == false) {
 									mouseOccupied = false;
 									ghostActive = false;
@@ -574,6 +582,12 @@ public class Battleship {
 						if (turnDone == false) {
 							btnAdvanceState.setEnabled(false);
 							switch (HitMiss.HitOrMiss()) {
+							/* kolla om man har missat eller träffat.
+							 * lägg till objekten till en Array efteråt 
+							 * 0 = Overlap, kan inte placera
+							 * 1 = miss
+							 * 2 = träff
+							 */
 								case 0:
 									break;
 								case 1:
@@ -585,6 +599,7 @@ public class Battleship {
 										HitMiss miss = new HitMiss(Cursor.cursorX_P2, Cursor.cursorY_P2, false);
 										markers_P2.add(miss);
 									}
+									//man har missat, och dessutom har man då gjort klart sitt tur. 
 									turnDone = true;
 									btnAdvanceState.setEnabled(true);
 									
@@ -598,6 +613,7 @@ public class Battleship {
 										HitMiss hit = new HitMiss(Cursor.cursorX_P2, Cursor.cursorY_P2, true);
 										markers_P2.add(hit);
 									}
+									//man har träffat, då ska man få skjuta en gång till.
 									turnDone = false;
 									btnAdvanceState.setEnabled(false);
 									break;
@@ -655,6 +671,10 @@ public class Battleship {
 				Turn += 0.5;
 				System.out.println("DEBUG: PlayerID = " + PlayerID);
 				switch (PlayerID) {
+				/*
+				 * Skapa skärm för att man inte ska se andras skepp mellan turn 1 och 3
+				 * Uppdatera info labels
+				 */
 					case 1:
 						blocks.clear();
 						//Block B1 = new Block(606, 0, 380, 380);
@@ -708,7 +728,7 @@ public class Battleship {
 		
 		btnClearBoardP1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ships.clear();			//ta bort alla skeppar från grid
+				ships.clear();			//ta bort alla skeppar från grid, som en reset knapp
 				CountCV = 1;
 				CountBB = 2;
 				CountCL = 3;
@@ -733,7 +753,7 @@ public class Battleship {
 		frmBattleship.getContentPane().add(btnClearBoardP2);
 		
 		btnRegainFocus.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {		//Knapp för att fokusera på panelen för att kunna flytta cursor.
+			public void actionPerformed(ActionEvent e) {		//Knapp för att fokusera på panelen för att kunna flytta cursor i fall man har cmd+tab:at
 				panel_Game.requestFocusInWindow();
 			}
 		});

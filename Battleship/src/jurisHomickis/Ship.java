@@ -7,7 +7,7 @@ public class Ship {
 	
 	int hp, w, x, y, h, ID;
 	
-	
+	//skapa ett skepp
 	public Ship (int x, int y, int w, int h, int ID) {
 		this.ID = ID;
 		switch (ID) {
@@ -36,6 +36,13 @@ public class Ship {
 		
 	}
 	
+	
+	/*
+	 * Metoden kollar om man försöker lägga ett skepp bredvid eller ovanpå ett annat skepp. 
+	 * Metoden gör det genom att skapa en osynlig fyrkant runt om skepp som redan finns.
+	 * Den kollar om först någon cursor är inne i den, och sen den andra sidan av skeppet.
+	 * Om en av de är inne i fyrkanten eller inte inne i fältet kan man då inte placera skeppet. 
+	 */
 	public static boolean checkOverlap() {
 		boolean overlap = false;
 		for (int i = 0; i < Battleship.ships.size(); i++) {
